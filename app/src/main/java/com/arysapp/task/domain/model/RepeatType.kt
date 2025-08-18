@@ -1,4 +1,4 @@
-package com.arysapp.task.data.local.entity
+package com.arysapp.task.domain.model
 
 enum class RepeatType {
     NONE,

@@ -2,6 +2,7 @@ package com.arysapp.task.data.local.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.arysapp.task.domain.model.RepeatType
 import com.arysapp.task.utils.Constants.COLUMN_TASK_CREATED_AT
 import com.arysapp.task.utils.Constants.COLUMN_TASK_DESCRIPTION
 import com.arysapp.task.utils.Constants.COLUMN_TASK_END_TIME
