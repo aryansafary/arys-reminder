@@ -68,7 +68,12 @@ dependencies {
 //Dagger Hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
+    implementation(libs.hilt.navigation.compose)
+    implementation("androidx.hilt:hilt-navigation-fragment:1.0.0")
 //Navigation
     implementation(libs.androidx.navigation.compose)
+//Corutines
+    implementation(libs.kotlinx.coroutines.android)
+
 
 }

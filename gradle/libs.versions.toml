@@ -13,7 +13,9 @@ ksp_version = "2.2.0-2.0.2"
 datastorePreferences = "1.1.7"
 room_version = "2.7.2"
 hiltAndroid = "2.57"
+hiltNavigationCompose = "1.2.0"
 navigationCompose = "2.9.3"
+kotlinxCoroutinesAndroid = "1.10.2"
 
 
 [libraries]
@@ -41,8 +43,11 @@ androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref =
 #Dagger Hilt
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroid" }
+hilt-navigation-compose={ module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 #Navigation
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+#Corutines
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
 
 
 
