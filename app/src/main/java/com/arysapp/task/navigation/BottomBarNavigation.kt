@@ -3,7 +3,6 @@ package com.arysapp.task.navigation
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
@@ -15,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -31,19 +29,16 @@ fun BottomBarNavigation(
 ){
    val items = listOf(
        BottomBarItem(
-           name = stringResource(R.string.Home),
            selectedIcon = painterResource(R.drawable.home_filled),
            unselectedIcon = painterResource(R.drawable.home_outlined),
            route = Screens.Home.route
        ),
        BottomBarItem(
-           name = stringResource(R.string.Calendar),
            selectedIcon = painterResource(R.drawable.calendar_filled),
            unselectedIcon = painterResource(R.drawable.calendar_outlined),
            route = Screens.Calendar.route
        ),
        BottomBarItem(
-           name = stringResource(R.string.Settings),
            selectedIcon = painterResource(R.drawable.settings_filled),
            unselectedIcon = painterResource(R.drawable.settings_outlined),
            route = Screens.Settings.route
@@ -85,7 +80,6 @@ val showBottomBar = backStackEntry.value?.destination?.route in items.map { it.r
                                 modifier = Modifier.height(24.dp),
                                 tint = if (selected) BottomBarColors.Selected else BottomBarColors.Unselected,
                             )
-                            Spacer(modifier = Modifier.height(4.dp))
                             Text(
                                 text = item.name,
                                 style = MaterialTheme.typography.labelSmall,
