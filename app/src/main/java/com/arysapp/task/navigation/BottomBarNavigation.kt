@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -29,16 +30,20 @@ fun BottomBarNavigation(
 ){
    val items = listOf(
        BottomBarItem(
+           name = stringResource(R.string.Home),
            selectedIcon = painterResource(R.drawable.home_filled),
            unselectedIcon = painterResource(R.drawable.home_outlined),
-           route = Screens.Home.route
+           route = Screens.Home.route,
+
        ),
        BottomBarItem(
+           name = stringResource(R.string.Calendar),
            selectedIcon = painterResource(R.drawable.calendar_filled),
            unselectedIcon = painterResource(R.drawable.calendar_outlined),
            route = Screens.Calendar.route
        ),
        BottomBarItem(
+           name = stringResource(R.string.Settings),
            selectedIcon = painterResource(R.drawable.settings_filled),
            unselectedIcon = painterResource(R.drawable.settings_outlined),
            route = Screens.Settings.route
