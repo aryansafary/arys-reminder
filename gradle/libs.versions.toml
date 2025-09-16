@@ -11,6 +11,7 @@ composeBom = "2025.08.00"
 ##################################################################################
 ksp_version = "2.2.0-2.0.2"
 datastorePreferences = "1.1.7"
+lottieCompose = "6.6.7"
 room_version = "2.7.2"
 hiltAndroid = "2.57"
 hiltNavigationCompose = "1.2.0"
@@ -48,6 +49,7 @@ hilt-navigation-compose={ module = "androidx.hilt:hilt-navigation-compose", vers
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 #Corutines
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
+lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottieCompose" }
 
 
 

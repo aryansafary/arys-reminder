@@ -6,7 +6,7 @@ import com.arysapp.task.data.local.AppDatabase
 import com.arysapp.task.data.local.dao.TaskDao
 import com.arysapp.task.data.repository.TaskRepositoryImpl
 import com.arysapp.task.domain.repository.TaskRepository
-import com.arysapp.task.utils.Constants.DATABASE_NAME
+import com.arysapp.task.utils.ConstantsDatabase.DATABASE_NAME
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
