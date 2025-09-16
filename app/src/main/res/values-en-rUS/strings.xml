@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ArysTask</string>
+    <string name="title">title</string>
+    <string name="description">description</string>
+    <string name="Home">Home</string>
+    <string name="Calendar">Calendar</string>
+    <string name="Settings">Settings</string>
+</resources>
