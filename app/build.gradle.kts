@@ -72,9 +72,10 @@ dependencies {
     //implementation("androidx.hilt:hilt-navigation-fragment:1.0.0")
 //Navigation
     implementation(libs.androidx.navigation.compose)
-//Corutines
+//Coroutines
     implementation(libs.kotlinx.coroutines.android)
-
 // Animations Lottie
     implementation(libs.lottie.compose)
+// System  UI Controller
+    implementation(libs.accompanist.systemuicontroller)
 }

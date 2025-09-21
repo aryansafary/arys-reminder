@@ -2,7 +2,6 @@ package com.arysapp.task
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -21,6 +20,7 @@ import androidx.navigation.compose.rememberNavController
 import com.arysapp.task.navigation.BottomBarNavigation
 import com.arysapp.task.navigation.SetupNavGraph
 import com.arysapp.task.ui.components.AppConfig
+import com.arysapp.task.ui.components.ChangeStatusBarColor
 import com.arysapp.task.ui.theme.ArysTaskTheme
 import com.arysapp.task.utils.Constants.PERSIAN_LANGUAGE
 import com.arysapp.task.utils.Constants.USER_LANGUAGE
@@ -43,6 +43,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             ArysTaskTheme {
                 navController = rememberNavController()
+                ChangeStatusBarColor(navController)
                 AppConfig()
                 LocaleUtils.setLocale(LocalContext.current, USER_LANGUAGE)
                 CompositionLocalProvider(
