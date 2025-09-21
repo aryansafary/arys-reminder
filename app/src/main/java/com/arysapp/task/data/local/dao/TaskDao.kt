@@ -4,7 +4,7 @@ import com.arysapp.task.data.local.entity.TaskEntity
 import com.arysapp.task.utils.ConstantsDatabase.COLUMN_TASK_CREATED_AT
 import com.arysapp.task.utils.ConstantsDatabase.COLUMN_TASK_ID
 import com.arysapp.task.utils.ConstantsDatabase.COLUMN_TASK_IS_ACTIVE
-import com.arysapp.task.utils.ConstantsDatabase.COLUMN_TASK_START_TIME
+import com.arysapp.task.utils.ConstantsDatabase.COLUMN_TASK_DATE_TIME
 import com.arysapp.task.utils.ConstantsDatabase.TASK_TABLE_NAME
 import kotlinx.coroutines.flow.Flow
 
@@ -33,7 +33,7 @@ interface TaskDao {
     @Query("SELECT * FROM $TASK_TABLE_NAME ORDER BY $COLUMN_TASK_CREATED_AT DESC")
     fun getAllTasks(): Flow<List<TaskEntity>>
 
-    @Query("SELECT * FROM $TASK_TABLE_NAME WHERE $COLUMN_TASK_IS_ACTIVE = 1 ORDER BY $COLUMN_TASK_START_TIME ASC")
+    @Query("SELECT * FROM $TASK_TABLE_NAME WHERE $COLUMN_TASK_IS_ACTIVE = 1 ORDER BY $COLUMN_TASK_DATE_TIME ASC")
     fun getActiveTasks(): Flow<List<TaskEntity>>
 
     @Query("UPDATE $TASK_TABLE_NAME SET $COLUMN_TASK_IS_ACTIVE = :isActive WHERE $COLUMN_TASK_ID = :id")

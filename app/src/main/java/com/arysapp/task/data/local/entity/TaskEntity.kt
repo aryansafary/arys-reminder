@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 import com.arysapp.task.domain.model.RepeatType
 import com.arysapp.task.utils.ConstantsDatabase.COLUMN_TASK_CREATED_AT
 import com.arysapp.task.utils.ConstantsDatabase.COLUMN_TASK_DESCRIPTION
-import com.arysapp.task.utils.ConstantsDatabase.COLUMN_TASK_END_TIME
+import com.arysapp.task.utils.ConstantsDatabase.COLUMN_TASK_HOUR_TIME
 import com.arysapp.task.utils.ConstantsDatabase.COLUMN_TASK_ID
 import com.arysapp.task.utils.ConstantsDatabase.COLUMN_TASK_IS_ACTIVE
 import com.arysapp.task.utils.ConstantsDatabase.COLUMN_TASK_REMINDER_MINUTES_BEFORE
@@ -13,7 +13,7 @@ import com.arysapp.task.utils.ConstantsDatabase.COLUMN_TASK_REPEAT_INTERVAL_DAYS
 import com.arysapp.task.utils.ConstantsDatabase.COLUMN_TASK_REPEAT_INTERVAL_MONTHS
 import com.arysapp.task.utils.ConstantsDatabase.COLUMN_TASK_REPEAT_INTERVAL_WEEKS
 import com.arysapp.task.utils.ConstantsDatabase.COLUMN_TASK_REPEAT_TYPE
-import com.arysapp.task.utils.ConstantsDatabase.COLUMN_TASK_START_TIME
+import com.arysapp.task.utils.ConstantsDatabase.COLUMN_TASK_DATE_TIME
 import com.arysapp.task.utils.ConstantsDatabase.COLUMN_TASK_TITLE
 import com.arysapp.task.utils.ConstantsDatabase.COLUMN_TASK_UPDATED_AT
 import com.arysapp.task.utils.ConstantsDatabase.TASK_TABLE_NAME
@@ -30,11 +30,11 @@ data class TaskEntity(
     @ColumnInfo(name = COLUMN_TASK_DESCRIPTION)
     val description: String? = null,
 
-    @ColumnInfo(name = COLUMN_TASK_START_TIME)
-    val startTime: String? = null,
+    @ColumnInfo(name = COLUMN_TASK_DATE_TIME)
+    val dateTime: String? = null,
 
-    @ColumnInfo(name = COLUMN_TASK_END_TIME)
-    val endTime: String? = null,
+    @ColumnInfo(name = COLUMN_TASK_HOUR_TIME)
+    val hourTime: String? = null,
 
     @ColumnInfo(name = COLUMN_TASK_REPEAT_TYPE)
     val repeatType: String = RepeatType.NONE.name,
