@@ -31,9 +31,9 @@ data class JalaliDate(
 
         fun fromGregorian(gy: Int, gm: Int, gd: Int): JalaliDate {
             val g_d_m = intArrayOf(0, 31, if (isLeapGregorian(gy)) 29 else 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
-            var gy = gy
-            var gm = gm
-            var gd = gd
+            val gy = gy
+            val gm = gm
+            val gd = gd
 
             var jy: Int
             var jm: Int
@@ -124,8 +124,8 @@ data class JalaliDate(
 
     fun toGregorian(): IntArray {
         val j_days_in_month = intArrayOf(31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 29)
-        var jy = year - 979
-        var jm = month - 1
+        val jy = year - 979
+        val jm = month - 1
         val jd = day - 1
 
         var j_day_no = 365 * jy + jy / 33 * 8 + (jy % 33 + 3) / 4

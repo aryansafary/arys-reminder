@@ -13,16 +13,11 @@ fun InfiniteWheelTimePicker(
     modifier: Modifier = Modifier,
     initialHour: Int = 0,
     initialMinute: Int = 0,
-    minHour: Int = 0,
-    minMinute: Int = 0,
     itemHeight: Dp = 48.dp,
-    onTimeSelected: (hour: Int, minute: Int, dayIncrement: Boolean) -> Unit
+    onTimeSelected: (hour: Int, minute: Int) -> Unit
 ) {
-    var hour by remember { mutableIntStateOf(initialHour.coerceAtLeast(minHour)) }
-    var minute by remember { mutableIntStateOf(
-        if (hour == minHour) initialMinute.coerceAtLeast(minMinute) else initialMinute.coerceIn(0..59)
-    ) }
-    var dayIncrement by remember { mutableStateOf(false) }
+    var hour by remember { mutableIntStateOf(initialHour.coerceIn(0..23)) }
+    var minute by remember { mutableIntStateOf(initialMinute.coerceIn(0..59)) }
 
     Row(
         modifier = modifier,
@@ -30,47 +25,27 @@ fun InfiniteWheelTimePicker(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         InfiniteWheelColumn(
-            items = (minHour..23).toList(),
-            initialIndex = hour - minHour,
+            items = (0..23).toList(),
+            initialIndex = hour,
             width = 96.dp,
             itemHeight = itemHeight
         ) { selectedHour ->
-            if (selectedHour < hour) {
-                // اگر ساعت کمتر شد، یعنی روز به عقب نرود فقط مقدار ساعت را روی حداقل تنظیم می‌کنیم
-                hour = if (selectedHour < minHour) {
-                    minHour
-                } else {
-                    selectedHour
-                }
-                dayIncrement = false
-            } else if (selectedHour > hour) {
-                // اگر ساعت افزایش یافت ولی به 24 نرسید روز تغییر نکند
-                hour = selectedHour
-                dayIncrement = false
-            } else {
-                hour = selectedHour
-                dayIncrement = false
-            }
-
-            // با تغییر ساعت، دقیقه را بر اساس minMinute اصلاح کن
-            minute = if (hour == minHour) minute.coerceAtLeast(minMinute) else minute.coerceIn(0..59)
-            onTimeSelected(hour, minute, dayIncrement)
+            hour = selectedHour
+            onTimeSelected(hour, minute)
         }
 
         Spacer(modifier = Modifier.width(4.dp))
 
         InfiniteWheelColumn(
-            items = if (hour == minHour) (minMinute..59).toList() else (0..59).toList(),
-            initialIndex = if (hour == minHour) minute - minMinute else minute,
+            items = (0..59).toList(),
+            initialIndex = minute,
             width = 96.dp,
             itemHeight = itemHeight
         ) { selectedMinute ->
-            // زمانی که دقیقه به 0 رسید و ساعت 23 است، روز جلو می‌رود
-            dayIncrement = hour == 23 && selectedMinute < minute
-
             minute = selectedMinute
-            onTimeSelected(hour, minute, dayIncrement)
+            onTimeSelected(hour, minute)
         }
     }
 }
+
 
