@@ -17,10 +17,11 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.arysapp.task.navigation.BottomBarNavigation
 import com.arysapp.task.navigation.SetupNavGraph
+import com.arysapp.task.navigation.topbar.MyTopAppBar
 import com.arysapp.task.ui.components.AppConfig
 import com.arysapp.task.ui.components.ChangeStatusBarColor
+import com.arysapp.task.ui.components.MyFloatingActionButton
 import com.arysapp.task.ui.theme.ArysTaskTheme
 import com.arysapp.task.utils.Constants.PERSIAN_LANGUAGE
 import com.arysapp.task.utils.Constants.USER_LANGUAGE
@@ -53,18 +54,18 @@ class MainActivity : ComponentActivity() {
                 ) {
                     Scaffold(
                         modifier = Modifier.fillMaxSize(),
-                        topBar = {},
-                        floatingActionButton = {},
-                        bottomBar = {
-                            BottomBarNavigation(
+                        topBar = {
+                            MyTopAppBar(
                                 navController = navController,
-                                onItemClick = {
-                                    navController.navigate(it.route)
-                                }
+                                searchQuery = "",
+                                {},
+                                {},
+                                {}
                             )
-                        }
-
-
+                        },
+                        floatingActionButton = {
+                            MyFloatingActionButton (navController)
+                        },
                     ) { innerPadding ->
                         Column(modifier = Modifier
                             .fillMaxSize()

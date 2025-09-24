@@ -1,6 +1,7 @@
 package com.arysapp.task.ui.theme
 
 import androidx.compose.material3.Typography
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -21,6 +22,15 @@ val fontExtraBold = FontFamily(
     Font(R.font.vazirmatn_extra_bold)
 )
 
+val Typography.SemiBold : TextStyle
+    @Composable
+    get() = TextStyle(
+        fontFamily = fontBold,
+        fontWeight = FontWeight.Bold,
+        fontSize = 20.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.5.sp
+    )
 
 val Typography = Typography(
     bodyLarge = TextStyle(

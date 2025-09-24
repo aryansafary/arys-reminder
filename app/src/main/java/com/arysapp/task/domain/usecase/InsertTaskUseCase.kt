@@ -11,8 +11,8 @@ class InsertTaskUseCase @Inject constructor(
     suspend operator fun invoke(
         title: String,
         description: String? = null,
-        startTime: String? = null,
-        endTime: String? = null,
+        dateTime: String? = null,
+        hourTime: String? = null,
         repeatType: String = RepeatType.NONE.name,
         repeatIntervalDays: Int? = null,
         repeatIntervalWeeks: Int? = null,
@@ -35,8 +35,8 @@ class InsertTaskUseCase @Inject constructor(
             val task = TaskModel(
                 title = title.trim(),
                 description = description?.trim(),
-                startTime = startTime,
-                endTime = endTime,
+                dateTime = dateTime,
+                hourTime = hourTime,
                 repeatType = validatedRepeatType,
                 repeatIntervalDays = repeatIntervalDays,
                 repeatIntervalWeeks = repeatIntervalWeeks,

@@ -6,4 +6,18 @@
     <string name="Home">Home</string>
     <string name="Calendar">Calendar</string>
     <string name="Settings">Settings</string>
+    <string name="not_found_task">Not Found Any Task</string>
+    <string name="try_again">try Again</string>
+    <string name="search">Search</string>
+    <string name="add_task">Add New Task</string>
+    <string name="settings">Settings App</string>
+    <string name="select_repeatType">Selecting Repeat Type</string>
+    <string name="select_DateTime">Selecting Date Time task </string>
+    <string name="select_Time">Selecting Time task</string>
+        <string name="repeat_none">None</string>
+        <string name="repeat_daily">Daily</string>
+        <string name="repeat_weekly">Weekly</string>
+        <string name="repeat_monthly">Monthly</string>
+
+
 </resources>

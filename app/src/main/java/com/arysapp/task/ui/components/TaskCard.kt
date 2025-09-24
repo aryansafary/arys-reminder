@@ -29,12 +29,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.arysapp.task.domain.model.TaskModel
 import com.arysapp.task.R
+import com.arysapp.task.domain.model.RepeatType
+import com.arysapp.task.ui.theme.SemiBold
 
 @Composable
 fun TaskCard(
     task: TaskModel,
     onToggle: (Boolean) -> Unit,
-    modifier: Modifier = Modifier
 ) {
     val cardColor by animateColorAsState(
         if (task.isActive) MaterialTheme.colorScheme.primary
@@ -43,7 +44,7 @@ fun TaskCard(
     )
 
     Card(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp),
         shape = RoundedCornerShape(16.dp),
@@ -71,8 +72,9 @@ fun TaskCard(
                 AssistChip(
                     onClick = { },
                     label = {
+                        val repeatTypeEnum = RepeatType.valueOf(task.repeatType)
                         Text(
-                            text = task.repeatType,
+                            text = repeatTypeEnum.getLabel(),
                             style = MaterialTheme.typography.labelMedium,
                             color = MaterialTheme.colorScheme.onTertiary,
                             fontWeight = FontWeight.Bold
@@ -95,7 +97,7 @@ fun TaskCard(
             task.description?.let {
                 Text(
                     text = it,
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.bodySmall,
                     modifier = Modifier.fillMaxWidth()
                 )
                 Spacer(modifier = Modifier.height(8.dp))
@@ -115,28 +117,31 @@ fun TaskCard(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
                     Icon(
                         painter = painterResource(R.drawable.calendar_icon),
                         contentDescription = "Date",
                         tint = MaterialTheme.colorScheme.onPrimary
                     )
-                    Spacer(modifier = Modifier.width(4.dp))
+                    Spacer(modifier = Modifier.width(2.dp))
                     Text(
                         text = task.dateTime ?: "----/--/--",
-                        style = MaterialTheme.typography.bodyLarge,
+                        style = MaterialTheme.typography.SemiBold,
                         fontWeight = FontWeight.SemiBold,
                     )
-                    Spacer(modifier = Modifier.width(16.dp))
+                    Spacer(modifier = Modifier.width(8.dp))
                     Icon(
                         painter = painterResource(R.drawable.time_icon),
                         contentDescription = "Time",
                         tint = MaterialTheme.colorScheme.onPrimary
                     )
-                    Spacer(modifier = Modifier.width(4.dp))
+                    Spacer(modifier = Modifier.width(2.dp))
                     Text(
                         text = task.hourTime ?: "--:--",
-                        style = MaterialTheme.typography.bodyLarge,
+                        style = MaterialTheme.typography.SemiBold,
                         fontWeight = FontWeight.SemiBold,
                     )
                 }

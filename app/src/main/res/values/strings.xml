@@ -5,4 +5,17 @@
     <string name="Home">خانه</string>
     <string name="Calendar">تقویم</string>
     <string name="Settings">تنظیمات</string>
+    <string name="not_found_task">هیچ وظیفه‌ای یافت نشد</string>
+    <string name="try_again">مجدد تلاش کن</string>
+    <string name="search">جستوجو</string>
+    <string name="add_task">افزودن وظیفه</string>
+    <string name="settings">تنظیمات برنامه</string>
+    <string name="select_repeatType">حالت نکرار را انتخاب کنید</string>
+    <string name="select_DateTime">تاریخ فعالیت رو انتخاب کنید</string>
+    <string name="select_Time">زمان فعالیت رو انتخاب کنید</string>
+        <string name="repeat_none">هیچکدام</string>
+        <string name="repeat_daily">روزانه</string>
+        <string name="repeat_weekly">هفتگی</string>
+        <string name="repeat_monthly">ماهانه</string>
+
 </resources>

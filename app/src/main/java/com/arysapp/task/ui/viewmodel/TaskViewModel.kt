@@ -57,8 +57,8 @@ class TaskViewModel @Inject constructor(
     fun insertTask(
         title: String,
         description: String? = null,
-        startTime: String? = null,
-        endTime: String? = null,
+        dateTime: String? = null,
+        hourTime: String? = null,
         repeatType: String = RepeatType.NONE.name,
         repeatIntervalDays: Int? = null,
         repeatIntervalWeeks: Int? = null,
@@ -68,7 +68,7 @@ class TaskViewModel @Inject constructor(
         viewModelScope.launch {
             _tasks.value = StateResult.Loading
             val result = taskUseCases.insertTask(
-                title, description, startTime, endTime,
+                title, description, dateTime, hourTime,
                 repeatType, repeatIntervalDays, repeatIntervalWeeks,
                 repeatIntervalMonths, reminderMinutesBefore
             )

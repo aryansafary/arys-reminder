@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.arysapp.task.ui.screen.CalendarScreen
+import com.arysapp.task.ui.screen.AddTaskScreen
 import com.arysapp.task.ui.screen.HomeScreen
 import com.arysapp.task.ui.screen.SettingsScreen
 
@@ -18,8 +18,8 @@ fun SetupNavGraph(navController: NavHostController) {
             HomeScreen()
         }
 
-        composable(route = Screens.Calendar.route) {
-            CalendarScreen()
+        composable(route = Screens.AddTask.route) {
+            AddTaskScreen(navController=navController)
         }
 
         composable(route = Screens.Settings.route) {
