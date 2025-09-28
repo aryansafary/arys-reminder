@@ -1,7 +1,10 @@
 package com.arysapp.task.ui.screen
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -16,9 +19,13 @@ import androidx.navigation.NavController
 import com.arysapp.task.ui.components.ArysOutlinedTextField
 import com.arysapp.task.R
 import com.arysapp.task.domain.model.RepeatType
-import com.arysapp.task.ui.components.InfiniteWheelJalaliDatePicker
-import com.arysapp.task.ui.components.InfiniteWheelTimePicker
+import com.arysapp.task.ui.components.MyDatePicker
+import com.arysapp.task.ui.components.MyTimePicker
 import com.arysapp.task.ui.viewmodel.TaskViewModel
+import com.arysapp.task.utils.Constants.USER_LANGUAGE
+import com.arysapp.task.utils.helper.JalaliDate
+import java.util.Calendar
+
 
 
 @Composable
@@ -30,9 +37,24 @@ var title by remember { mutableStateOf("") }
 var description by remember { mutableStateOf("") }
 var repeatType by remember { mutableStateOf(RepeatType.NONE.name) }
 var time by remember { mutableStateOf("") }
-var date by remember { mutableStateOf("") }
+    USER_LANGUAGE = "fa"
+var date by remember {
+        mutableStateOf(
+            if (USER_LANGUAGE == "fa")
+                "${JalaliDate.today().year}-" +
+                "${JalaliDate.today().month.toString().padStart(2, '0')}-" +
+                "${JalaliDate.today().day.toString().padStart(2, '0')} "
+             else
+                "${Calendar.getInstance().get(Calendar.YEAR)}-" +
+                "${(Calendar.getInstance().get(Calendar.MONTH) + 1).toString().padStart(2, '0')}-" +
+                "${Calendar.getInstance().get(Calendar.DAY_OF_MONTH).toString().padStart(2, '0')} "
+        )
+    }
+
     Column (
-    modifier = Modifier.fillMaxSize(),
+    modifier = Modifier
+        .fillMaxSize()
+        .verticalScroll(rememberScrollState()),
     ){
     ArysOutlinedTextField(
         value = title,
@@ -63,14 +85,24 @@ var date by remember { mutableStateOf("") }
     )
     Spacer(modifier = Modifier.height(12.dp))
     SectionHeader(painterResource(R.drawable.time_icon), LocalContext.current.getString(R.string.select_Time))
-    InfiniteWheelTimePicker(
-        modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
-    ){ hour, minute ->  time = "${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}" }
+//    InfinityWheelTimePicker (
+//        selectedDate = date,
+//        userLanguage = USER_LANGUAGE
+//    ){ Log.d("TAG", "AddTaskScreen: $it")   }
+        MyTimePicker(
+            selectedDate = date,
+            userLanguage = USER_LANGUAGE){
+            time = it
+            Log.d("TAG", "AddTaskScreen: $it")
+        }
     Spacer(modifier = Modifier.height(12.dp))
     SectionHeader(painterResource(R.drawable.calendar_icon), LocalContext.current.getString(R.string.select_DateTime))
-    InfiniteWheelJalaliDatePicker(
-        modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
-    ){(year, month, day) -> date ="${year.toString().padStart(4, '0')}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}" }
+        MyDatePicker (
+            userLanguage = USER_LANGUAGE,
+            selectedDate = date,
+        ){dateSelected ->
+            Log.d("DateNew", "AddTaskScreen: $dateSelected")
+            date = dateSelected }
     Spacer(modifier = Modifier.height(12.dp))
     SectionHeader(painterResource(R.drawable.repeat_100px_1), LocalContext.current.getString(R.string.select_repeatType))
     FlowRow(

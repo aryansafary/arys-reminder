@@ -17,5 +17,9 @@
         <string name="repeat_daily">روزانه</string>
         <string name="repeat_weekly">هفتگی</string>
         <string name="repeat_monthly">ماهانه</string>
+     <string name="selecting_date">انتخاب تاریخ</string>
+    <string name="selecting_time">انتخاب زمان</string>
+    <string name="confirm">تایید</string>
+    <string name="cancel">لغو</string>
 
 </resources>

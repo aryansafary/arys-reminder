@@ -18,6 +18,11 @@
         <string name="repeat_daily">Daily</string>
         <string name="repeat_weekly">Weekly</string>
         <string name="repeat_monthly">Monthly</string>
+    <string name="selecting_date">Selecting Date</string>
+    <string name="selecting_time">Selecting Time</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+
 
 
 </resources>
