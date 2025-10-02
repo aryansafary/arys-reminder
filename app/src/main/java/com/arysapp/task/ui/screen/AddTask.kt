@@ -1,5 +1,4 @@
 package com.arysapp.task.ui.screen
-import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.rememberScrollState
@@ -12,11 +11,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.arysapp.task.ui.components.ArysOutlinedTextField
+import com.arysapp.task.ui.components.MyOutlinedTextField
 import com.arysapp.task.R
 import com.arysapp.task.domain.model.RepeatType
 import com.arysapp.task.ui.components.MyDatePicker
@@ -37,7 +37,6 @@ var title by remember { mutableStateOf("") }
 var description by remember { mutableStateOf("") }
 var repeatType by remember { mutableStateOf(RepeatType.NONE.name) }
 var time by remember { mutableStateOf("") }
-    USER_LANGUAGE = "fa"
 var date by remember {
         mutableStateOf(
             if (USER_LANGUAGE == "fa")
@@ -56,25 +55,27 @@ var date by remember {
         .fillMaxSize()
         .verticalScroll(rememberScrollState()),
     ){
-    ArysOutlinedTextField(
+    MyOutlinedTextField(
         value = title,
         modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
         onValueChange = { title = it },
         label = LocalContext.current.getString(R.string.title),
+        maxLength = 20,
         leadingIcon = {
             Icon(painter = painterResource(R.drawable.title_100px_1),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.height(24.dp)
-            )
+                modifier = Modifier.height(24.dp),
+                )
                       },
     )
     Spacer(modifier = Modifier.height(8.dp))
-    ArysOutlinedTextField(
+    MyOutlinedTextField(
         value = description,
         modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
         onValueChange = { description = it },
         label = LocalContext.current.getString(R.string.description),
+        maxLength = 20,
         leadingIcon = {
             Icon(painter = painterResource(R.drawable.description_100px_2),
                 contentDescription = null,
@@ -84,25 +85,20 @@ var date by remember {
                       },
     )
     Spacer(modifier = Modifier.height(12.dp))
-    SectionHeader(painterResource(R.drawable.time_icon), LocalContext.current.getString(R.string.select_Time))
-//    InfinityWheelTimePicker (
-//        selectedDate = date,
-//        userLanguage = USER_LANGUAGE
-//    ){ Log.d("TAG", "AddTaskScreen: $it")   }
-        MyTimePicker(
-            selectedDate = date,
-            userLanguage = USER_LANGUAGE){
-            time = it
-            Log.d("TAG", "AddTaskScreen: $it")
-        }
-    Spacer(modifier = Modifier.height(12.dp))
     SectionHeader(painterResource(R.drawable.calendar_icon), LocalContext.current.getString(R.string.select_DateTime))
         MyDatePicker (
-            userLanguage = USER_LANGUAGE,
             selectedDate = date,
-        ){dateSelected ->
-            Log.d("DateNew", "AddTaskScreen: $dateSelected")
-            date = dateSelected }
+        ){
+            date = it
+        }
+        Spacer(modifier = Modifier.height(12.dp))
+    SectionHeader(painterResource(R.drawable.time_icon), LocalContext.current.getString(R.string.select_Time))
+        MyTimePicker(
+            selectedDate = date
+        ){
+            time = it
+        }
+
     Spacer(modifier = Modifier.height(12.dp))
     SectionHeader(painterResource(R.drawable.repeat_100px_1), LocalContext.current.getString(R.string.select_repeatType))
     FlowRow(
@@ -132,6 +128,7 @@ var date by remember {
     }
     Spacer(modifier = Modifier.height(12.dp))
     Button(
+        enabled = !title.isEmpty() && !date.isEmpty() && !time.isEmpty() && !repeatType.isEmpty(),
         onClick = {
             val (days, weeks, months) = when(repeatType) {
                 RepeatType.DAILY.name -> Triple(1, null, null)
@@ -155,10 +152,11 @@ var date by remember {
             .fillMaxWidth()
             .height(56.dp)
 
+
            ,
         shape = RoundedCornerShape(12.dp),
     ) {
-        Text("ذخیره فعالیت")
+        Text(text = stringResource(R.string.save_task))
     }
 }
 }
@@ -166,6 +164,7 @@ var date by remember {
 @Composable
 fun SectionHeader(icon: Painter, title: String) {
     Row(
+        modifier = Modifier.padding(start = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Start
     ) {
@@ -178,7 +177,7 @@ fun SectionHeader(icon: Painter, title: String) {
         Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = title,
-            style = MaterialTheme.typography.bodySmall,
+            style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.Bold
         )
     }

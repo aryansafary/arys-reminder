@@ -21,5 +21,9 @@
     <string name="selecting_time">انتخاب زمان</string>
     <string name="confirm">تایید</string>
     <string name="cancel">لغو</string>
+    <string name="select_minutes">انتخاب دقیقه</string>
+    <string name="select_hour">انتخاب ساعت</string>
+    <string name="save_task">افزودن فعالیت</string>
+
 
 </resources>

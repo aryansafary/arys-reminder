@@ -30,7 +30,9 @@ import androidx.compose.ui.unit.dp
 import com.arysapp.task.domain.model.TaskModel
 import com.arysapp.task.R
 import com.arysapp.task.domain.model.RepeatType
-import com.arysapp.task.ui.theme.SemiBold
+import com.arysapp.task.ui.theme.toPersianDigits
+import com.arysapp.task.utils.Constants.PERSIAN_LANGUAGE
+import com.arysapp.task.utils.Constants.USER_LANGUAGE
 
 @Composable
 fun TaskCard(
@@ -128,8 +130,8 @@ fun TaskCard(
                     )
                     Spacer(modifier = Modifier.width(2.dp))
                     Text(
-                        text = task.dateTime ?: "----/--/--",
-                        style = MaterialTheme.typography.SemiBold,
+                        text = if(USER_LANGUAGE==PERSIAN_LANGUAGE)task.dateTime.toString().toPersianDigits()else task.dateTime ?: "----/--/--",
+                        style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.SemiBold,
                     )
                     Spacer(modifier = Modifier.width(8.dp))
@@ -140,8 +142,8 @@ fun TaskCard(
                     )
                     Spacer(modifier = Modifier.width(2.dp))
                     Text(
-                        text = task.hourTime ?: "--:--",
-                        style = MaterialTheme.typography.SemiBold,
+                        text = if(USER_LANGUAGE==PERSIAN_LANGUAGE)task.hourTime.toString().toPersianDigits()else task.hourTime ?: "--:--",
+                        style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.SemiBold,
                     )
                 }

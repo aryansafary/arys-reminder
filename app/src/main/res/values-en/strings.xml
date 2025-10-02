@@ -22,6 +22,9 @@
     <string name="selecting_time">Selecting Time</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
+    <string name="select_minutes">Select Minutes</string>
+    <string name="select_hour">Select Hour</string>
+    <string name="save_task">Add Task</string>
 
 
 
