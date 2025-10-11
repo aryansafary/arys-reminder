@@ -1,4 +1,4 @@
-package com.arysapp.task.utils.extension
+package com.arysapp.task.utils.mapper
 
 import com.arysapp.task.data.local.entity.TaskEntity
 import com.arysapp.task.domain.model.TaskModel

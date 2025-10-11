@@ -25,6 +25,18 @@
     <string name="select_minutes">Select Minutes</string>
     <string name="select_hour">Select Hour</string>
     <string name="save_task">Add Task</string>
+   <string name="Reminder">Reminder</string>
+    <string name="Task_Reminder">Reminder Tasks</string>
+    <string name="stop">Stop</string>
+    <string name="alarm_notif">Notification related to active alarms (sound is played by the service)</string>
+    <string name="task_alarm">Task Alarm</string>
+    <string name="One_day_until_activity">One day until the start of the activity</string>
+    <string name="One_hour_until_activity">One hour until the start of the activity</string>
+    <string name="Half_hour_until_activity">Half an hour until the start of the activity</string>
+    <string name="Fifteen_minutes_until_activity">Fifteen minutes until the activity starts.</string>
+    <string name="One_minutes_until_activity">یک دقیقه تا شروع فعالیت</string>
+    <string name="At_time_of_activity">Activity execution time</string>
+    <string name="twelve_hour_until_activity">Twelve hours left until the activity starts.</string>
 
 
 

@@ -34,6 +34,8 @@ import com.arysapp.task.ui.theme.toPersianDigits
 import com.arysapp.task.utils.Constants.PERSIAN_LANGUAGE
 import com.arysapp.task.utils.Constants.USER_LANGUAGE
 
+
+
 @Composable
 fun TaskCard(
     task: TaskModel,
@@ -44,7 +46,6 @@ fun TaskCard(
         else MaterialTheme.colorScheme.secondary,
         label = "Card Color Animation"
     )
-
     Card(
         modifier = Modifier
             .fillMaxWidth()

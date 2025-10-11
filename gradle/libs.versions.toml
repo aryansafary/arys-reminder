@@ -1,6 +1,7 @@
 [versions]
 
 agp = "8.12.0"
+hiltNavigationFragment = "1.0.0"
 kotlin = "2.2.0"
 coreKtx = "1.17.0"
 junit = "4.13.2"
@@ -19,9 +20,15 @@ hiltNavigationCompose = "1.2.0"
 navigationCompose = "2.9.3"
 kotlinxCoroutinesAndroid = "1.10.2"
 accompanistSystemuicontroller = "0.36.0"
+workMultiprocess = "2.10.5"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-hilt-navigation-fragment = { module = "androidx.hilt:hilt-navigation-fragment", version.ref = "hiltNavigationFragment" }
+androidx-hilt-work = { module = "androidx.hilt:hilt-work", version.ref = "hiltNavigationFragment" }
+androidx-work-multiprocess = { module = "androidx.work:work-multiprocess", version.ref = "workMultiprocess" }
+androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "workMultiprocess" }
+androidx-work-testing = { module = "androidx.work:work-testing", version.ref = "workMultiprocess" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }

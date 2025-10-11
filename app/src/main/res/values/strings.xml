@@ -24,6 +24,18 @@
     <string name="select_minutes">انتخاب دقیقه</string>
     <string name="select_hour">انتخاب ساعت</string>
     <string name="save_task">افزودن فعالیت</string>
+    <string name="Reminder">یادآوری </string>
+    <string name="Task_Reminder">یادآوری فعالیت‌ها</string>
+    <string name="task_alarm">آلارم فعالیت</string>
+    <string name="stop">توقف</string>
+    <string name="alarm_notif">نوتیفیکیشن مربوط به آلارم فعال (صدا توسط سرویس پخش می‌شود)</string>
+    <string name="One_day_until_activity">یک روز تا شروع فعالیت</string>
+    <string name="One_hour_until_activity">یک ساعت تا شروع فعالیت</string>
+    <string name="Half_hour_until_activity">نیم ساعت تا شروع فعالیت</string>
+    <string name="Fifteen_minutes_until_activity">پانزده دقیقه تا شروع فعالیت</string>
+    <string name="One_minutes_until_activity">یک دقیقه تا شروع فعالیت</string>
+    <string name="At_time_of_activity"> زمان شروع فعالیت</string>
+    <string name="twelve_hour_until_activity">دوازده ساعت تا شروع فعالیت</string>
 
 
 </resources>

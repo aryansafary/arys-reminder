@@ -69,7 +69,13 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
     implementation(libs.hilt.navigation.compose)
-    //implementation("androidx.hilt:hilt-navigation-fragment:1.0.0")
+    implementation(libs.androidx.work.runtime.ktx)
+    // optional - Test helpers
+   androidTestImplementation(libs.androidx.work.testing)
+    // optional - Multiprocess support
+    implementation(libs.androidx.work.multiprocess)
+    implementation(libs.androidx.hilt.work)
+    implementation(libs.androidx.hilt.navigation.fragment)
 //Navigation
     implementation(libs.androidx.navigation.compose)
 //Coroutines

@@ -41,7 +41,7 @@ fun MyTimePicker(
     selectedDate: String,
     onTimeSelected: (String) -> Unit
 ) {
-    val nowCalendar by rememberCurrentTimeState(30_000L)
+    val nowCalendar by rememberCurrentTimeState(1000L)
 
     val todayYear = nowCalendar.get(Calendar.YEAR).toString()
     val todayMonth = (nowCalendar.get(Calendar.MONTH) + 1).toString().padStart(2, '0')

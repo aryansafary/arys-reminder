@@ -5,6 +5,7 @@ import com.arysapp.task.utils.ConstantsDatabase.COLUMN_TASK_CREATED_AT
 import com.arysapp.task.utils.ConstantsDatabase.COLUMN_TASK_ID
 import com.arysapp.task.utils.ConstantsDatabase.COLUMN_TASK_IS_ACTIVE
 import com.arysapp.task.utils.ConstantsDatabase.COLUMN_TASK_DATE_TIME
+import com.arysapp.task.utils.ConstantsDatabase.COLUMN_TASK_HOUR_TIME
 import com.arysapp.task.utils.ConstantsDatabase.TASK_TABLE_NAME
 import kotlinx.coroutines.flow.Flow
 
@@ -38,4 +39,8 @@ interface TaskDao {
 
     @Query("UPDATE $TASK_TABLE_NAME SET $COLUMN_TASK_IS_ACTIVE = :isActive WHERE $COLUMN_TASK_ID = :id")
     suspend fun updateTaskStatus(id: Long, isActive: Boolean): Int
+
+    @Query("UPDATE $TASK_TABLE_NAME SET $COLUMN_TASK_DATE_TIME = :newDateTime, $COLUMN_TASK_HOUR_TIME = :newHourTime WHERE $COLUMN_TASK_ID = :id")
+    suspend fun updateTaskDateTime(id: Long, newDateTime: String, newHourTime: String?): Int
+
 }

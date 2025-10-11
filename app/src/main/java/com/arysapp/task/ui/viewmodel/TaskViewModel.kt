@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.arysapp.task.domain.model.RepeatType
 import com.arysapp.task.domain.model.TaskModel
+import com.arysapp.task.core.alarm.TaskReminderScheduler
 import com.arysapp.task.domain.usecase.TaskUseCases
 import com.arysapp.task.utils.StateResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,28 +16,28 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TaskViewModel @Inject constructor(
-    private val taskUseCases: TaskUseCases
+    private val taskUseCases: TaskUseCases,
+    private val reminderScheduler: TaskReminderScheduler
 ) : ViewModel() {
 
     private val _tasks = MutableStateFlow<StateResult<List<TaskModel>>>(StateResult.Loading)
     val tasks: StateFlow<StateResult<List<TaskModel>>> = _tasks.asStateFlow()
 
-    private val _selectedTask = MutableStateFlow<TaskModel?>(null)
-    val selectedTask: StateFlow<TaskModel?> = _selectedTask.asStateFlow()
-
     init {
         getAllTasks()
-    }
 
+    }
     fun getAllTasks() {
         viewModelScope.launch {
             _tasks.value = StateResult.Loading
             try {
                 taskUseCases.getAllTasks().collect { tasksList ->
                     _tasks.value = StateResult.Success(tasksList)
+                    reminderScheduler.scheduleRemindersForTasks(tasksList)
+
                 }
             } catch (e: Exception) {
-                _tasks.value = StateResult.Error(e.message ?: "خطا در بارگذاری تسک‌ها")
+                _tasks.value = StateResult.Error(e.message ?: "Error loading tasks")
             }
         }
     }
@@ -49,7 +50,7 @@ class TaskViewModel @Inject constructor(
                     _tasks.value = StateResult.Success(tasksList.filter { it.isActive })
                 }
             } catch (e: Exception) {
-                _tasks.value = StateResult.Error(e.message ?: "خطا در بارگذاری تسک‌های فعال")
+                _tasks.value = StateResult.Error(e.message ?: "Error loading tasks")
             }
         }
     }
@@ -75,6 +76,7 @@ class TaskViewModel @Inject constructor(
             // استفاده از isSuccess و isFailure به جای Success و Failure
             if (result.isSuccess) {
                 getAllTasks()
+                reminderScheduler.scheduleAllReminders()
             } else if (result.isFailure) {
                 _tasks.value = StateResult.Error(
                     result.exceptionOrNull()?.message ?: "خطا در افزودن تسک"
@@ -89,9 +91,10 @@ class TaskViewModel @Inject constructor(
             val result = taskUseCases.updateTask(task)
             if (result.isSuccess) {
                 getAllTasks()
+                reminderScheduler.scheduleAllReminders()
             } else if (result.isFailure) {
                 _tasks.value = StateResult.Error(
-                    result.exceptionOrNull()?.message ?: "خطا در به‌روزرسانی تسک"
+                    result.exceptionOrNull()?.message ?: "Error updating task"
                 )
             }
         }
@@ -103,6 +106,7 @@ class TaskViewModel @Inject constructor(
             val result = taskUseCases.deleteTask(task)
             if (result.isSuccess) {
                 getAllTasks()
+                reminderScheduler.cancelReminderForTask(task.id)
             } else if (result.isFailure) {
                 _tasks.value = StateResult.Error(
                     result.exceptionOrNull()?.message ?: "خطا در حذف تسک"
@@ -119,15 +123,10 @@ class TaskViewModel @Inject constructor(
                 getAllTasks()
             } else if (result.isFailure) {
                 _tasks.value = StateResult.Error(
-                    result.exceptionOrNull()?.message ?: "خطا در به‌روزرسانی وضعیت"
+                    result.exceptionOrNull()?.message ?: "Error updating task status"
                 )
             }
         }
     }
 
-
-
-    fun selectTask(task: TaskModel) {
-        _selectedTask.value = task
-    }
 }

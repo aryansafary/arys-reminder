@@ -3,8 +3,8 @@ package com.arysapp.task.data.repository
 import com.arysapp.task.data.local.dao.TaskDao
 import com.arysapp.task.domain.model.TaskModel
 import com.arysapp.task.domain.repository.TaskRepository
-import com.arysapp.task.utils.extension.toDomain
-import com.arysapp.task.utils.extension.toEntity
+import com.arysapp.task.utils.mapper.toDomain
+import com.arysapp.task.utils.mapper.toEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -52,4 +52,11 @@ class TaskRepositoryImpl @Inject constructor(
     override suspend fun updateTaskStatus(id: Long, isActive: Boolean): Int {
         return taskDao.updateTaskStatus(id, isActive)
     }
+
+
+    override suspend fun updateTaskDateTime(id: Long, newDateTime: String, newHourTime: String?): Int {
+        return taskDao.updateTaskDateTime(id, newDateTime, newHourTime)
+    }
+
+
 }

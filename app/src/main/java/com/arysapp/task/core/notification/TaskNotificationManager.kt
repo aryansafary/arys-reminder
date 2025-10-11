@@ -1,0 +1,142 @@
+package com.arysapp.task.core.notification
+import android.Manifest
+import com.arysapp.task.R
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
+import android.media.RingtoneManager
+import android.net.Uri
+import android.os.Build
+import androidx.annotation.RequiresPermission
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import com.arysapp.task.MainActivity
+import com.arysapp.task.core.alarm.AlarmIntentFactory
+import com.arysapp.task.core.alarm.AlarmRingtoneService
+
+object TaskNotificationManager {
+
+    const val CHANNEL_ID_REMINDER = "task_reminder_channel"
+    const val CHANNEL_ID_ALARM = "task_alarm_channel"
+
+    private const val REMINDER_ID_OFFSET = 10_000
+    const val ACTION_STOP_ALARM = "com.arysapp.task.action.STOP_ALARM"
+
+    fun ensureChannelsExist(context: Context) {
+        ensureReminderChannelExists(context)
+        ensureAlarmChannelExists(context)
+    }
+
+    private fun ensureReminderChannelExists(context: Context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val nm = context.getSystemService(NotificationManager::class.java)
+            if (nm.getNotificationChannel(CHANNEL_ID_REMINDER) == null) {
+                val channel = NotificationChannel(
+                    CHANNEL_ID_REMINDER,
+                    context.getString(R.string.Task_Reminder),
+                    NotificationManager.IMPORTANCE_DEFAULT
+                ).apply {
+                    description = context.getString(R.string.Task_Reminder)
+                }
+                nm.createNotificationChannel(channel)
+            }
+        }
+    }
+
+    private fun ensureAlarmChannelExists(context: Context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val nm = context.getSystemService(NotificationManager::class.java)
+            if (nm.getNotificationChannel(CHANNEL_ID_ALARM) == null) {
+                val channel = NotificationChannel(
+                    CHANNEL_ID_ALARM,
+                    context.getString(R.string.task_alarm),
+                    NotificationManager.IMPORTANCE_HIGH
+                ).apply {
+                    description = context.getString(R.string.alarm_notif)
+                    setSound(null, null)
+                    enableVibration(true)
+                }
+                nm.createNotificationChannel(channel)
+            }
+        }
+    }
+
+    @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
+    fun showReminderNotification(context: Context, title: String, message: String, taskId: Long) {
+        ensureReminderChannelExists(context)
+
+        val openIntent = Intent(context, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        val pending = PendingIntent.getActivity(
+            context,
+            taskId.toInt(),
+            openIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+
+        val notif = NotificationCompat.Builder(context, CHANNEL_ID_REMINDER)
+            .setSmallIcon(R.drawable.calendar_icon)
+            .setContentTitle(title)
+            .setContentText(message)
+            .setAutoCancel(true)
+            .setSound(sound)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setContentIntent(pending)
+            .build()
+
+        NotificationManagerCompat.from(context).notify((taskId.toInt()) + REMINDER_ID_OFFSET, notif)
+    }
+
+    fun createStopPendingIntent(
+        context: Context,
+        taskId: Long,
+        repeatType: String?,
+        dateTime: String?,
+        hourTime: String?
+    ): PendingIntent {
+        val stopIntent = Intent(context, AlarmRingtoneService::class.java).apply {
+            action = ACTION_STOP_ALARM
+            putExtra(AlarmIntentFactory.EXTRA_TASK_ID, taskId)
+            putExtra(AlarmIntentFactory.EXTRA_REPEAT_TYPE, repeatType)
+            putExtra(AlarmIntentFactory.EXTRA_DATE_TIME, dateTime)
+            putExtra(AlarmIntentFactory.EXTRA_HOUR_TIME, hourTime)
+            setPackage(context.packageName)
+        }
+
+        val req = if (taskId != -1L) taskId.toInt() else 0
+        return PendingIntent.getService(
+            context,
+            req,
+            stopIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+    }
+
+    fun buildAlarmForegroundNotification(
+        context: Context,
+        title: String,
+        message: String,
+        stopPendingIntent: PendingIntent,
+        notificationId : Int
+    ): Notification {
+        ensureAlarmChannelExists(context)
+
+        return NotificationCompat.Builder(context, CHANNEL_ID_ALARM)
+            .setSmallIcon(R.drawable.time_icon)
+            .setContentTitle(title)
+            .setContentText(message)
+            .setOngoing(true)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .addAction(R.drawable.settings_outlined, context.getString(R.string.stop), stopPendingIntent)
+            .build()
+    }
+
+    fun getDefaultAlarmSound(): Uri =
+        RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM) ?: RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+}
