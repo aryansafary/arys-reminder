@@ -165,7 +165,6 @@ val isEditMode = taskModel != null
         modifier = Modifier
             .fillMaxWidth()
             .height(56.dp)
-
            ,
         shape = RoundedCornerShape(12.dp),
     ) {
