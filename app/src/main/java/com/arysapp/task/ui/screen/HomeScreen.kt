@@ -20,15 +20,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.arysapp.task.domain.model.TaskModel
 import com.arysapp.task.ui.components.TaskCard
 import com.arysapp.task.ui.viewmodel.TaskViewModel
 import com.arysapp.task.utils.StateResult
 import com.arysapp.task.R
+import com.arysapp.task.navigation.Screens
+import com.google.gson.Gson
 
 
 @Composable
 fun HomeScreen(
+    navController: NavController,
     viewModel: TaskViewModel = hiltViewModel(),
 ) {
     val tasksState by viewModel.tasks.collectAsState()
@@ -75,6 +79,15 @@ fun HomeScreen(
                             items(items = tasks, key = { it.id }) { task ->
                                 TaskCard(
                                     task = task,
+                                    onEdit = { task ->
+                                        val gson = Gson()
+                                        val taskJson = gson.toJson(task)
+                                        navController.navigate(Screens.AddTask.withArgs(taskJson))
+
+                                    },
+                                    onDelete = { deletedTask ->
+                                        viewModel.deleteTask(task)
+                                    },
                                     onToggle = { newState ->
                                         viewModel.updateTaskStatus(task.id, newState)
                                     }

@@ -1,55 +1,43 @@
 package com.arysapp.task.ui.components
 
-
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.AssistChip
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Switch
-import androidx.compose.material3.SwitchDefaults
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.arysapp.task.domain.model.TaskModel
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import com.arysapp.task.R
 import com.arysapp.task.domain.model.RepeatType
+import com.arysapp.task.domain.model.TaskModel
 import com.arysapp.task.ui.theme.toPersianDigits
 import com.arysapp.task.utils.Constants.PERSIAN_LANGUAGE
 import com.arysapp.task.utils.Constants.USER_LANGUAGE
 
-
-
 @Composable
 fun TaskCard(
     task: TaskModel,
-    onToggle: (Boolean) -> Unit,
+    onEdit: (TaskModel) -> Unit,
+    onDelete: (TaskModel) -> Unit,
+    onToggle: (Boolean) -> Unit
 ) {
-    val cardColor by animateColorAsState(
-        if (task.isActive) MaterialTheme.colorScheme.primary
-        else MaterialTheme.colorScheme.secondary,
-        label = "Card Color Animation"
-    )
+    var showDeleteDialog by remember { mutableStateOf(false) }
+
+    val cardColor = if (task.isActive) MaterialTheme.colorScheme.primary
+    else MaterialTheme.colorScheme.secondary
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),
+            .padding(8.dp)
+            .combinedClickable(
+                onClick = { onEdit(task) },
+                onLongClick = { showDeleteDialog = true }
+            ),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = cardColor,
@@ -60,20 +48,20 @@ fun TaskCard(
         Column(
             modifier = Modifier.padding(16.dp)
         ) {
-            // Title + Repeat Type
+            // Title + Repeat Type Row
             Row(
+                modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     text = task.title,
                     style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold,
+                    fontWeight = FontWeight.Bold
                 )
 
                 AssistChip(
-                    onClick = { },
+                    onClick = {  },
                     label = {
                         val repeatTypeEnum = RepeatType.valueOf(task.repeatType)
                         Text(
@@ -112,7 +100,7 @@ fun TaskCard(
                 color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.3f)
             )
 
-            // Time Row
+            // Time Row with Toggle
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -131,7 +119,9 @@ fun TaskCard(
                     )
                     Spacer(modifier = Modifier.width(2.dp))
                     Text(
-                        text = if(USER_LANGUAGE==PERSIAN_LANGUAGE)task.dateTime.toString().toPersianDigits()else task.dateTime ?: "----/--/--",
+                        text = if (USER_LANGUAGE == PERSIAN_LANGUAGE)
+                            task.dateTime.toString().toPersianDigits()
+                        else task.dateTime ?: "----/--/--",
                         style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.SemiBold,
                     )
@@ -143,13 +133,14 @@ fun TaskCard(
                     )
                     Spacer(modifier = Modifier.width(2.dp))
                     Text(
-                        text = if(USER_LANGUAGE==PERSIAN_LANGUAGE)task.hourTime.toString().toPersianDigits()else task.hourTime ?: "--:--",
+                        text = if (USER_LANGUAGE == PERSIAN_LANGUAGE)
+                            task.hourTime.toString().toPersianDigits()
+                        else task.hourTime ?: "--:--",
                         style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.SemiBold,
                     )
                 }
 
-                // Toggle Switch
                 Switch(
                     checked = task.isActive,
                     onCheckedChange = { onToggle(it) },
@@ -163,9 +154,38 @@ fun TaskCard(
             }
         }
     }
+
+    if (showDeleteDialog) {
+        AlertDialog(
+            onDismissRequest = { showDeleteDialog = false },
+            icon = {
+                Icon(
+                    painter = painterResource(R.drawable.delete_100px),
+                        contentDescription = "Delete Task Icon",
+                    tint = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.size(48.dp),
+
+
+                )
+            },
+            title = { Text(text = stringResource(R.string.deleteTask),
+                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.titleLarge
+            ) },
+            text = { Text(text = stringResource(R.string.delete_task_confirmation)) },
+            confirmButton = {
+                TextButton(onClick = {
+                    showDeleteDialog = false
+                    onDelete(task)
+                }) {
+                    Text(text = stringResource(R.string.yes))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDeleteDialog = false }) {
+                    Text(text = stringResource(R.string.no))
+                }
+            }
+        )
+    }
 }
-
-
-
-
-

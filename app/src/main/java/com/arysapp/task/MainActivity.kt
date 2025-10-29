@@ -17,6 +17,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.arysapp.task.navigation.Screens
 import com.arysapp.task.navigation.SetupNavGraph
 import com.arysapp.task.navigation.topbar.MyTopAppBar
 import com.arysapp.task.ui.components.AppConfig
@@ -61,7 +62,9 @@ class MainActivity : ComponentActivity() {
                                 searchQuery = "",
                                 {},
                                 {},
-                                {}
+                                {
+                                    navController.navigate(Screens.Settings.route)
+                                }
                             )
                         },
                         floatingActionButton = {

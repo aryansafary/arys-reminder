@@ -1,5 +1,6 @@
 package com.arysapp.task.navigation.topbar
 
+import android.util.Log
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -116,7 +117,7 @@ fun MyTopAppBar(
             modifier = modifier,
             title = {Text(text = when(currentRoute) {
                 Screens.Settings.route -> stringResource(R.string.settings)
-                Screens.AddTask.route -> stringResource(R.string.add_task)
+                Screens.AddTask.withArgs("{task}") -> stringResource(R.string.add_task)
                 else -> {stringResource(R.string.app_name)}
             })},
             navigationIcon = {

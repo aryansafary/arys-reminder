@@ -2,8 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    alias (libs.plugins.hiltPlugin)
-    alias (libs.plugins.ksp)
+    alias(libs.plugins.hiltPlugin)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -24,8 +24,7 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
         }
     }
@@ -64,14 +63,14 @@ dependencies {
 //Room Database
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.runtime)
-    ksp (libs.androidx.room.compiler)
+    ksp(libs.androidx.room.compiler)
 //Dagger Hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
     implementation(libs.hilt.navigation.compose)
     implementation(libs.androidx.work.runtime.ktx)
     // optional - Test helpers
-   androidTestImplementation(libs.androidx.work.testing)
+    androidTestImplementation(libs.androidx.work.testing)
     // optional - Multiprocess support
     implementation(libs.androidx.work.multiprocess)
     implementation(libs.androidx.hilt.work)
@@ -84,4 +83,6 @@ dependencies {
     implementation(libs.lottie.compose)
 // System  UI Controller
     implementation(libs.accompanist.systemuicontroller)
+    //GSON
+    implementation(libs.gson)
 }

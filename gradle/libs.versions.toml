@@ -1,7 +1,6 @@
 [versions]
 
 agp = "8.12.0"
-hiltNavigationFragment = "1.0.0"
 kotlin = "2.2.0"
 coreKtx = "1.17.0"
 junit = "4.13.2"
@@ -21,6 +20,8 @@ navigationCompose = "2.9.3"
 kotlinxCoroutinesAndroid = "1.10.2"
 accompanistSystemuicontroller = "0.36.0"
 workMultiprocess = "2.10.5"
+gson = "2.13.2"
+hiltNavigationFragment = "1.0.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -61,7 +62,8 @@ kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutine
 lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottieCompose" }
 #System UI Controller
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanistSystemuicontroller" }
-
+#Gson
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

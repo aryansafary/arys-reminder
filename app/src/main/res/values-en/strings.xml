@@ -10,14 +10,15 @@
     <string name="try_again">try Again</string>
     <string name="search">Search</string>
     <string name="add_task">Add New Task</string>
+    <string name="edit_task">Edit Task</string>
     <string name="settings">Settings App</string>
     <string name="select_repeatType">Selecting Repeat Type</string>
     <string name="select_DateTime">Selecting Date Time task </string>
     <string name="select_Time">Selecting Time task</string>
-        <string name="repeat_none">None</string>
-        <string name="repeat_daily">Daily</string>
-        <string name="repeat_weekly">Weekly</string>
-        <string name="repeat_monthly">Monthly</string>
+    <string name="repeat_none">None</string>
+    <string name="repeat_daily">Daily</string>
+    <string name="repeat_weekly">Weekly</string>
+    <string name="repeat_monthly">Monthly</string>
     <string name="selecting_date">Selecting Date</string>
     <string name="selecting_time">Selecting Time</string>
     <string name="confirm">Confirm</string>
@@ -25,7 +26,7 @@
     <string name="select_minutes">Select Minutes</string>
     <string name="select_hour">Select Hour</string>
     <string name="save_task">Add Task</string>
-   <string name="Reminder">Reminder</string>
+    <string name="Reminder">Reminder</string>
     <string name="Task_Reminder">Reminder Tasks</string>
     <string name="stop">Stop</string>
     <string name="alarm_notif">Notification related to active alarms (sound is played by the service)</string>
@@ -34,10 +35,20 @@
     <string name="One_hour_until_activity">One hour until the start of the activity</string>
     <string name="Half_hour_until_activity">Half an hour until the start of the activity</string>
     <string name="Fifteen_minutes_until_activity">Fifteen minutes until the activity starts.</string>
-    <string name="One_minutes_until_activity">یک دقیقه تا شروع فعالیت</string>
+    <string name="One_minutes_until_activity">one Minutes until the start of the activity</string>
     <string name="At_time_of_activity">Activity execution time</string>
     <string name="twelve_hour_until_activity">Twelve hours left until the activity starts.</string>
-
+    <string name="All">All</string>
+    <string name="ActiveTask">TurnOn</string>
+    <string name="Edit">Edit</string>
+    <string name="Delete">Delete</string>
+    <string name="Cancel">Cancel</string>
+    <string name="itemSelected">Selected</string>
+    <string name="delete_task_confirmation">Are you sure you want to delete this Task?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="deleteTask">Delete Task</string>
+    <string name="Edit_task">Edit Task</string>
 
 
 </resources>

@@ -19,6 +19,7 @@ import androidx.navigation.NavController
 import com.arysapp.task.ui.components.MyOutlinedTextField
 import com.arysapp.task.R
 import com.arysapp.task.domain.model.RepeatType
+import com.arysapp.task.domain.model.TaskModel
 import com.arysapp.task.ui.components.MyDatePicker
 import com.arysapp.task.ui.components.MyTimePicker
 import com.arysapp.task.ui.viewmodel.TaskViewModel
@@ -31,11 +32,12 @@ import java.util.Calendar
 @Composable
 fun AddTaskScreen(
     taskViewModel: TaskViewModel = hiltViewModel(),
-    navController: NavController
+    navController: NavController,
+    taskModel: TaskModel? = null
 ) {
-var title by remember { mutableStateOf("") }
-var description by remember { mutableStateOf("") }
-var repeatType by remember { mutableStateOf(RepeatType.NONE.name) }
+var title by remember { mutableStateOf(taskModel?.title?:"") }
+var description by remember { mutableStateOf(taskModel?.description?:"") }
+var repeatType by remember { mutableStateOf(taskModel?.repeatType?:RepeatType.NONE.name) }
 var time by remember { mutableStateOf("") }
 var date by remember {
         mutableStateOf(
@@ -49,7 +51,7 @@ var date by remember {
                 "${Calendar.getInstance().get(Calendar.DAY_OF_MONTH).toString().padStart(2, '0')} "
         )
     }
-
+val isEditMode = taskModel != null
     Column (
     modifier = Modifier
         .fillMaxSize()
@@ -136,6 +138,18 @@ var date by remember {
                 RepeatType.MONTHLY.name -> Triple(null, null, 1)
                 else -> Triple(null, null, null)
             }
+            if(isEditMode)
+                taskViewModel.updateTask(taskModel.copy(
+                    title = title,
+                    description = description,
+                    dateTime = date,
+                    hourTime = time,
+                    repeatType = repeatType,
+                    repeatIntervalDays = days,
+                    repeatIntervalWeeks = weeks,
+                    repeatIntervalMonths = months,
+                    isActive = true
+                )) else
             taskViewModel.insertTask(
                 title = title,
                 description = description,
@@ -156,7 +170,7 @@ var date by remember {
            ,
         shape = RoundedCornerShape(12.dp),
     ) {
-        Text(text = stringResource(R.string.save_task))
+        Text(text = stringResource(if(isEditMode) R.string.Edit_task else R.string.save_task))
     }
 }
 }

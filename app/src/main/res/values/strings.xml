@@ -8,16 +8,17 @@
     <string name="not_found_task">هیچ وظیفه‌ای یافت نشد</string>
     <string name="try_again">مجدد تلاش کن</string>
     <string name="search">جستوجو</string>
-    <string name="add_task">افزودن وظیفه</string>
+    <string name="add_task">فعالیت جدید</string>
+    <string name="edit_task">ویرایش وظیفه</string>
     <string name="settings">تنظیمات برنامه</string>
-    <string name="select_repeatType">حالت نکرار را انتخاب کنید</string>
+    <string name="select_repeatType">حالت تکرار را انتخاب کنید</string>
     <string name="select_DateTime">تاریخ فعالیت رو انتخاب کنید</string>
     <string name="select_Time">زمان فعالیت رو انتخاب کنید</string>
-        <string name="repeat_none">هیچکدام</string>
-        <string name="repeat_daily">روزانه</string>
-        <string name="repeat_weekly">هفتگی</string>
-        <string name="repeat_monthly">ماهانه</string>
-     <string name="selecting_date">انتخاب تاریخ</string>
+    <string name="repeat_none">هیچکدام</string>
+    <string name="repeat_daily">روزانه</string>
+    <string name="repeat_weekly">هفتگی</string>
+    <string name="repeat_monthly">ماهانه</string>
+    <string name="selecting_date">انتخاب تاریخ</string>
     <string name="selecting_time">انتخاب زمان</string>
     <string name="confirm">تایید</string>
     <string name="cancel">لغو</string>
@@ -36,6 +37,16 @@
     <string name="One_minutes_until_activity">یک دقیقه تا شروع فعالیت</string>
     <string name="At_time_of_activity"> زمان شروع فعالیت</string>
     <string name="twelve_hour_until_activity">دوازده ساعت تا شروع فعالیت</string>
-
+    <string name="All">همه</string>
+    <string name="ActiveTask">روشن کردن</string>
+    <string name="Edit">ویرایش</string>
+    <string name="Delete">حذف</string>
+    <string name="Cancel">انصراف</string>
+    <string name="itemSelected">انتخاب شده</string>
+    <string name="delete_task_confirmation">آیا از حذف این فعالیت مطمئن هستید؟</string>
+    <string name="yes">بله</string>
+    <string name="no">خیر</string>
+    <string name="deleteTask">حذف فعالیت</string>
+    <string name="Edit_task">ویرایش فعالیت</string>
 
 </resources>
