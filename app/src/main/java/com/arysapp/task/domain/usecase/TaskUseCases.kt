@@ -9,4 +9,6 @@ data class TaskUseCases @Inject constructor(
     val updateTask: UpdateTaskUseCase,
     val getAllTasks: GetAllTasksUseCase,
     val updateTaskDateTime:UpdateTaskDateTimeUseCase,
+    val backupTasks: BackupTasksUseCase,
+    val restoreTasks: RestoreTasksUseCase,
 )

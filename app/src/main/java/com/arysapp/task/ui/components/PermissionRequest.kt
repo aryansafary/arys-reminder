@@ -59,7 +59,7 @@ fun PermissionRequest(onPermissionsGranted: () -> Unit) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Text("Please Give Me Permissions !!")
+            Text("need permission")
             Spacer(modifier = Modifier.height(16.dp))
             Button(onClick = {
                 val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {

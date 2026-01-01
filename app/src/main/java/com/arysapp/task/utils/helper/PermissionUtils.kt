@@ -10,29 +10,29 @@ object PermissionUtils {
         return when {
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU -> listOf(
                 Manifest.permission.POST_NOTIFICATIONS,
-//                Manifest.permission.READ_MEDIA_VIDEO,
-//                Manifest.permission.READ_SMS,
-//                Manifest.permission.RECEIVE_SMS,
-//                Manifest.permission.SEND_SMS
+
             )
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> listOf(
                 Manifest.permission.SCHEDULE_EXACT_ALARM,
-//                Manifest.permission.READ_MEDIA_VIDEO,
-//                Manifest.permission.READ_SMS,
-//                Manifest.permission.RECEIVE_SMS,
-//                Manifest.permission.SEND_SMS
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.MANAGE_EXTERNAL_STORAGE,
+                Manifest.permission.MANAGE_DOCUMENTS,
             )
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> listOf(
-//                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-//                Manifest.permission.READ_SMS,
-//                Manifest.permission.RECEIVE_SMS,
-//                Manifest.permission.SEND_SMS
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.MANAGE_EXTERNAL_STORAGE,
+                Manifest.permission.MANAGE_DOCUMENTS,
             )
             else -> listOf(
-//                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-//                Manifest.permission.READ_SMS,
-//                Manifest.permission.RECEIVE_SMS,
-//                Manifest.permission.SEND_SMS
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.MANAGE_EXTERNAL_STORAGE,
+                Manifest.permission.MANAGE_DOCUMENTS,
+
+
+
             )
         }
     }

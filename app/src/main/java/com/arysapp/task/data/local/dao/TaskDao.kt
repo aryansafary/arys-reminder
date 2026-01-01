@@ -25,6 +25,9 @@ interface TaskDao {
     @Delete
     suspend fun deleteTask(task: TaskEntity): Int
 
+    @Query("DELETE FROM $TASK_TABLE_NAME")
+    suspend fun deleteAll(): Int
+
     @Query("DELETE FROM $TASK_TABLE_NAME WHERE $COLUMN_TASK_ID = :id")
     suspend fun deleteTaskById(id: Long): Int
 

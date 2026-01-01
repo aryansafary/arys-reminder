@@ -48,5 +48,31 @@
     <string name="no">خیر</string>
     <string name="deleteTask">حذف فعالیت</string>
     <string name="Edit_task">ویرایش فعالیت</string>
+    <string name="back_up">پشتیبان‌گیری اطلاعات</string>
+    <string name="restore">بازیابی اطلاعات</string>
+    <string name="about_me">درباره ما</string>
+    <string name="language">زبان برنامه</string>
+    <string name="english_lang">English</string>
+    <string name="persian_lang">فارسی</string>
+    <string name="select_lang">زبان مورد‌نظر خود را انتخاب کنید</string>
+    <string name="backup">پشتیبان‌گیری</string>
+    <string name="backup_text">همه تسک‌ها به فایل JSON در Downloads ذخیره می‌شود.</string>
+    <string name="start_backup">شروع پشتیبان‌گیری</string>
+    <string name="restore_text">فایل JSON از Downloads انتخاب کنید. تسک‌های قدیمی پاک می‌شوند.</string>
+    <string name="select_file">انتخاب فایل</string>
+    <string name="empty_backup_task">هیچ وظیفه‌ای برای پشتیبان‌گیری وجود ندارد</string>
+    <string name="backup_success">پشتیبان‌گیری با موفقیت انجام شد </string>
+    <string name="error_save_file">خطا در ذخیره فایل</string>
+    <string name="error_save">خطا در ذخیره</string>
+    <string name="error_backup">"خطا در پشتیبان‌گیری</string>
+    <string name="error">خطا</string>
+    <string name="invalid_file">فایل نامعتبر!</string>
+    <string name="can_not_read_file">قادر به خواندن فایل نیست</string>
+    <string name="empty_file">فایل خالی است</string>
+    <string name="restore_success">بازیابی با موفقیت انجام شد</string>
+    <string name="count_insert">تعداد وظایف افزوده شده</string>
+    <string name="error_restore">خطا در بازیابی اطلاعات</string>
+
+
 
 </resources>

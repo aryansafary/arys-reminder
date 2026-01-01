@@ -1,6 +1,5 @@
 package com.arysapp.task
 
-import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -34,9 +33,6 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     lateinit var navController: NavHostController
 
-    override fun attachBaseContext(newBase: Context) {
-        super.attachBaseContext(LocaleUtils.setLocale(newBase, PERSIAN_LANGUAGE))
-    }
 
 
     @OptIn(ExperimentalMaterial3Api::class)

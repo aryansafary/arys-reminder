@@ -1,16 +1,19 @@
 package com.arysapp.task.navigation.topbar
 
-import android.util.Log
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -29,8 +32,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.arysapp.task.R
 import com.arysapp.task.navigation.Screens
-
-@OptIn(ExperimentalMaterial3Api::class)
+@ExperimentalMaterial3Api
 @Composable
 fun MyTopAppBar(
     navController: NavController,
@@ -43,32 +45,23 @@ fun MyTopAppBar(
     var isSearching by remember { mutableStateOf(false) }
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
-    if(currentRoute == Screens.Home.route) {
+
+    if (currentRoute == Screens.Home.route) {
         TopAppBar(
             modifier = modifier,
-
-            navigationIcon = {
-                IconButton(onClick = { onSettingsClick() }) {
-                    Icon(
-                        painter = painterResource(R.drawable.settings_filled),
-                        contentDescription = "Settings",
-                        modifier = Modifier.height(24.dp)
-                    )
-                }
-            },
             title = {
                 AnimatedContent(
                     targetState = isSearching,
-                    transitionSpec = {
-                        fadeIn() togetherWith fadeOut()
-                    },
-                    label = "SearchAnimation"
+                    transitionSpec = { fadeIn() togetherWith fadeOut() },
+                    label = "SearchBarTransition"
                 ) { searching ->
                     if (searching) {
                         OutlinedTextField(
                             value = searchQuery,
                             onValueChange = onSearchQueryChange,
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(end = 8.dp),
                             placeholder = { Text(text = stringResource(R.string.search)) },
                             singleLine = true,
                             leadingIcon = {
@@ -79,47 +72,83 @@ fun MyTopAppBar(
                                     )
                                 }
                             },
-                            shape = RoundedCornerShape(12.dp),
                             colors = OutlinedTextFieldDefaults.colors(
                                 focusedContainerColor = Color.Transparent,
-                                unfocusedContainerColor = Color.Transparent,
-                                disabledContainerColor = Color.Transparent
-                            )
+                                unfocusedContainerColor = Color.Transparent
+                            ),
+                            shape = RoundedCornerShape(12.dp)
                         )
                     } else {
-                        Text(text = stringResource(R.string.app_name))
+                        Text(
+                            text = stringResource(R.string.app_name),
+                            style = MaterialTheme.typography.titleLarge
+                        )
+                    }
+                }
+            },
+            navigationIcon = {
+                AnimatedVisibility(
+                    visible = !isSearching,
+                    //enter = fadeIn(),
+                    //exit = fadeOut()
+                ) {
+                    IconButton(onClick = onSettingsClick) {
+                        Icon(
+                            painter = painterResource(R.drawable.settings_filled),
+                            contentDescription = "Settings",
+                            modifier = Modifier.size(24.dp)
+                        )
                     }
                 }
             },
             actions = {
-                if (!isSearching) {
-                    IconButton(onClick = { isSearching = true }) {
-                        Icon(
-                            painter = painterResource(R.drawable.search_icon_1),
-                            contentDescription = "Search",
-                            modifier = Modifier.height(24.dp)
-                        )
-                    }
-                    IconButton(onClick = { onFilterClick() }) {
-                        Icon(
-                            painter = painterResource(R.drawable.filter_icon_100px),
-                            contentDescription = "Filter",
-                            modifier = Modifier.height(24.dp)
-                        )
+                AnimatedContent(
+                    targetState = isSearching,
+                    transitionSpec = { fadeIn() togetherWith fadeOut() },
+                    label = "ActionsTransition"
+                ) { searching ->
+                    if (searching) {
+                        IconButton(onClick = onFilterClick) {
+                            Icon(
+                                painter = painterResource(R.drawable.filter_icon_100px),
+                                contentDescription = "Filter",
+                                modifier = Modifier.size(24.dp)
+                            )
+                        }
+                    } else {
+                        Row {
+                            IconButton(onClick = { isSearching = true }) {
+                                Icon(
+                                    painter = painterResource(R.drawable.search_icon_1),
+                                    contentDescription = "Search",
+                                    modifier = Modifier.size(24.dp)
+                                )
+                            }
+                            IconButton(onClick = onFilterClick) {
+                                Icon(
+                                    painter = painterResource(R.drawable.filter_icon_100px),
+                                    contentDescription = "Filter",
+                                    modifier = Modifier.size(24.dp)
+                                )
+                            }
+                        }
                     }
                 }
             }
-
-
         )
-    }else {
+    } else {
         TopAppBar(
             modifier = modifier,
-            title = {Text(text = when(currentRoute) {
-                Screens.Settings.route -> stringResource(R.string.settings)
-                Screens.AddTask.withArgs("{task}") -> stringResource(R.string.add_task)
-                else -> {stringResource(R.string.app_name)}
-            })},
+            title = {
+                Text(
+                    text = when (currentRoute) {
+                        Screens.Settings.route -> stringResource(R.string.settings)
+                        Screens.AddTask.withArgs("{task}") -> stringResource(R.string.add_task)
+                        else -> stringResource(R.string.app_name)
+                    },
+                    style = MaterialTheme.typography.titleLarge
+                )
+            },
             navigationIcon = {
                 IconButton(onClick = { navController.popBackStack() }) {
                     Icon(
