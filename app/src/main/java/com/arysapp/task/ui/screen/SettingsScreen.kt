@@ -301,7 +301,6 @@ fun SettingsScreen(
         }
         HorizontalDivider()
 
-
         SnackbarHost(
             hostState = snackBarHostState,
             modifier = Modifier.align(Alignment.CenterHorizontally)
