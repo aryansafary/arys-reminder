@@ -24,17 +24,17 @@ class TaskViewModel @Inject constructor(
     val tasks: StateFlow<StateResult<List<TaskModel>>> = _tasks.asStateFlow()
 
     init {
-        getAllTasks()
-
+        refreshTasksWithProcessing()
     }
-    fun getAllTasks() {
+
+    private fun refreshTasksWithProcessing() {
         viewModelScope.launch {
             _tasks.value = StateResult.Loading
             try {
+                taskUseCases.processExpiredTasks()
                 taskUseCases.getAllTasks().collect { tasksList ->
                     _tasks.value = StateResult.Success(tasksList)
                     reminderScheduler.scheduleRemindersForTasks(tasksList)
-
                 }
             } catch (e: Exception) {
                 _tasks.value = StateResult.Error(e.message ?: "Error loading tasks")
@@ -42,17 +42,8 @@ class TaskViewModel @Inject constructor(
         }
     }
 
-    fun getActiveTasks() {
-        viewModelScope.launch {
-            _tasks.value = StateResult.Loading
-            try {
-                taskUseCases.getAllTasks().collect { tasksList ->
-                    _tasks.value = StateResult.Success(tasksList.filter { it.isActive })
-                }
-            } catch (e: Exception) {
-                _tasks.value = StateResult.Error(e.message ?: "Error loading tasks")
-            }
-        }
+    fun getAllTasks() {
+        refreshTasksWithProcessing()
     }
 
     fun insertTask(
@@ -73,13 +64,12 @@ class TaskViewModel @Inject constructor(
                 repeatType, repeatIntervalDays, repeatIntervalWeeks,
                 repeatIntervalMonths, reminderMinutesBefore
             )
-            // استفاده از isSuccess و isFailure به جای Success و Failure
             if (result.isSuccess) {
-                getAllTasks()
+                refreshTasksWithProcessing()
                 reminderScheduler.scheduleAllReminders()
             } else if (result.isFailure) {
                 _tasks.value = StateResult.Error(
-                    result.exceptionOrNull()?.message ?: "خطا در افزودن تسک"
+                    result.exceptionOrNull()?.message ?: "Error inserting task"
                 )
             }
         }
@@ -90,7 +80,7 @@ class TaskViewModel @Inject constructor(
             _tasks.value = StateResult.Loading
             val result = taskUseCases.updateTask(task)
             if (result.isSuccess) {
-                getAllTasks()
+                refreshTasksWithProcessing()
                 reminderScheduler.scheduleAllReminders()
             } else if (result.isFailure) {
                 _tasks.value = StateResult.Error(
@@ -105,11 +95,11 @@ class TaskViewModel @Inject constructor(
             _tasks.value = StateResult.Loading
             val result = taskUseCases.deleteTask(task)
             if (result.isSuccess) {
-                getAllTasks()
+                refreshTasksWithProcessing()
                 reminderScheduler.cancelReminderForTask(task.id)
             } else if (result.isFailure) {
                 _tasks.value = StateResult.Error(
-                    result.exceptionOrNull()?.message ?: "خطا در حذف تسک"
+                    result.exceptionOrNull()?.message ?: "Error deleting task"
                 )
             }
         }
@@ -120,7 +110,7 @@ class TaskViewModel @Inject constructor(
             _tasks.value = StateResult.Loading
             val result = taskUseCases.updateTaskStatus(taskId, isActive)
             if (result.isSuccess) {
-                getAllTasks()
+                refreshTasksWithProcessing()
             } else if (result.isFailure) {
                 _tasks.value = StateResult.Error(
                     result.exceptionOrNull()?.message ?: "Error updating task status"
@@ -128,5 +118,4 @@ class TaskViewModel @Inject constructor(
             }
         }
     }
-
 }

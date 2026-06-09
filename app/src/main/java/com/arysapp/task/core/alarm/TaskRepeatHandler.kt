@@ -2,6 +2,7 @@ package com.arysapp.task.core.alarm
 
 import com.arysapp.task.domain.usecase.TaskUseCases
 import android.util.Log
+import com.arysapp.task.domain.model.TaskModel
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -22,7 +23,18 @@ class TaskRepeatHandler @Inject constructor(
         try {
             when (repeatType?.uppercase(Locale.getDefault()) ?: "NONE") {
                 "NONE" -> {
-                    taskUseCases.updateTaskStatus(taskId, false)
+                    val taskToDelete = TaskModel(
+                        id = taskId,
+                        title = "",
+                        description = "",
+                        dateTime = dateStr,
+                        hourTime = hourTime,
+                        repeatType = "NONE",
+                        isActive = true,
+                        createdAt = "",
+                        updatedAt = "",
+                    )
+                    taskUseCases.deleteTask(taskToDelete)
                 }
                 "DAILY" -> {
                     val newDate = incrementDate(dateStr, 1)

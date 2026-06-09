@@ -15,4 +15,5 @@ interface TaskRepository {
     suspend fun deleteTaskById(id: Long): Int
     suspend fun updateTaskStatus(id: Long, isActive: Boolean): Int
     suspend fun updateTaskDateTime(id: Long, newDateTime: String, newHourTime: String?): Int
+    suspend fun getAllTasksOnce(): List<TaskModel>
 }

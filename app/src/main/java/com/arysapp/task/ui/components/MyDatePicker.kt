@@ -42,8 +42,7 @@ import androidx.compose.ui.unit.dp
 import com.arysapp.task.utils.helper.JalaliDate
 import java.util.Calendar
 import com.arysapp.task.R
-import com.arysapp.task.ui.theme.toEnglishDigits
-import com.arysapp.task.ui.theme.toPersianDigits
+import com.arysapp.task.ui.theme.toDigits
 import com.arysapp.task.utils.Constants.PERSIAN_LANGUAGE
 import com.arysapp.task.utils.Constants.USER_LANGUAGE
 import java.util.GregorianCalendar
@@ -66,7 +65,7 @@ fun MyDatePicker(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
-                text = if(USER_LANGUAGE==PERSIAN_LANGUAGE) {selectedDate.toPersianDigits()} else {selectedDate.toEnglishDigits()}.ifEmpty { stringResource(R.string.selecting_date) },
+                text = selectedDate.toDigits().ifEmpty { stringResource(R.string.selecting_date) },
                 style = MaterialTheme.typography.bodyLarge
             )
         }
@@ -260,7 +259,7 @@ fun NumberPickerComposable(
         }
 
         Text(
-            text = if(USER_LANGUAGE==PERSIAN_LANGUAGE) currentValue.toString().toPersianDigits() else currentValue.toString().toEnglishDigits(),
+            text =  currentValue.toString().toDigits(),
             style = MaterialTheme.typography.titleMedium.copy(
                 fontSize = with(LocalDensity.current) { animatedSize.toSp() }
             ),

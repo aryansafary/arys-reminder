@@ -14,7 +14,7 @@ import androidx.compose.ui.res.stringResource
 import com.arysapp.task.R
 import com.arysapp.task.domain.model.RepeatType
 import com.arysapp.task.domain.model.TaskModel
-import com.arysapp.task.ui.theme.toPersianDigits
+import com.arysapp.task.ui.theme.toDigits
 import com.arysapp.task.utils.Constants.PERSIAN_LANGUAGE
 import com.arysapp.task.utils.Constants.USER_LANGUAGE
 
@@ -119,9 +119,7 @@ fun TaskCard(
                     )
                     Spacer(modifier = Modifier.width(2.dp))
                     Text(
-                        text = if (USER_LANGUAGE == PERSIAN_LANGUAGE)
-                            task.dateTime.toString().toPersianDigits()
-                        else task.dateTime ?: "----/--/--",
+                        text = task.dateTime.toString().toDigits(USER_LANGUAGE==PERSIAN_LANGUAGE),
                         style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.SemiBold,
                     )
@@ -133,9 +131,8 @@ fun TaskCard(
                     )
                     Spacer(modifier = Modifier.width(2.dp))
                     Text(
-                        text = if (USER_LANGUAGE == PERSIAN_LANGUAGE)
-                            task.hourTime.toString().toPersianDigits()
-                        else task.hourTime ?: "--:--",
+                        text =
+                            task.hourTime.toString().toDigits(),
                         style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.SemiBold,
                     )
@@ -157,7 +154,7 @@ fun TaskCard(
 
     if (showDeleteDialog) {
         AlertDialog(
-            onDismissRequest = { showDeleteDialog = false },
+            onDismissRequest = { },
             icon = {
                 Icon(
                     painter = painterResource(R.drawable.delete_100px),
@@ -175,14 +172,13 @@ fun TaskCard(
             text = { Text(text = stringResource(R.string.delete_task_confirmation)) },
             confirmButton = {
                 TextButton(onClick = {
-                    showDeleteDialog = false
                     onDelete(task)
                 }) {
                     Text(text = stringResource(R.string.yes))
                 }
             },
             dismissButton = {
-                TextButton(onClick = { showDeleteDialog = false }) {
+                TextButton(onClick = { }) {
                     Text(text = stringResource(R.string.no))
                 }
             }

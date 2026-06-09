@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
+import com.arysapp.task.ui.theme.toDigits
 
 @Composable
 fun MyOutlinedTextField(
@@ -23,7 +24,7 @@ fun MyOutlinedTextField(
     maxLength: Int = Int.MAX_VALUE
 ) {
     OutlinedTextField(
-        value = value,
+        value = value.toDigits(),
         onValueChange = { newValue ->
             if (newValue.length <= maxLength) {
                 onValueChange(newValue)

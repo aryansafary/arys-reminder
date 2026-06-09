@@ -1,5 +1,6 @@
 package com.arysapp.task.core.notification
 import android.Manifest
+import android.annotation.SuppressLint
 import com.arysapp.task.R
 import android.app.Notification
 import android.app.NotificationChannel
@@ -118,21 +119,42 @@ object TaskNotificationManager {
         )
     }
 
+    @SuppressLint("FullScreenIntentPolicy")
     fun buildAlarmForegroundNotification(
         context: Context,
         title: String,
         message: String,
         stopPendingIntent: PendingIntent,
-        notificationId : Int
+        notificationId: Int,
+        taskId: Long
     ): Notification {
         ensureAlarmChannelExists(context)
+
+        // این اینتنت اکتیویتی اصلی را باز می‌کند
+        val fullScreenIntent = Intent(context, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            putExtra("OPEN_SCREEN", "SHOW_ALARM")
+            putExtra("TASK_ID", taskId)
+            putExtra("TASK_TITLE", title)
+            putExtra("TASK_DESC", message)
+        }
+
+        val fullScreenPendingIntent = PendingIntent.getActivity(
+            context,
+            notificationId,
+            fullScreenIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
 
         return NotificationCompat.Builder(context, CHANNEL_ID_ALARM)
             .setSmallIcon(R.drawable.time_icon)
             .setContentTitle(title)
             .setContentText(message)
             .setOngoing(true)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setPriority(NotificationCompat.PRIORITY_MAX)
+            .setCategory(NotificationCompat.CATEGORY_ALARM)
+            .setFullScreenIntent(fullScreenPendingIntent, true)
+            .setAutoCancel(false)
             .addAction(R.drawable.settings_outlined, context.getString(R.string.stop), stopPendingIntent)
             .build()
     }

@@ -6,8 +6,6 @@ import android.app.AlarmManager
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import com.arysapp.task.utils.Constants.USER_LANGUAGE
-import com.arysapp.task.utils.helper.JalaliDate
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.first
 import java.text.SimpleDateFormat
@@ -107,14 +105,15 @@ class TaskReminderScheduler @Inject constructor(
 
     private fun parseDueTime(task: TaskModel): Long? {
         return try {
-            val dateStr = if (USER_LANGUAGE == "fa") {
-                val parts = task.dateTime!!.trim().split("-")
-                val jDate = JalaliDate(parts[0].toInt(), parts[1].toInt(), parts[2].toInt())
-                val gDate = jDate.toGregorian()
-                "%04d-%02d-%02d".format(gDate[0], gDate[1], gDate[2])
-            } else {
-                task.dateTime!!.trim()
-            }
+//            val dateStr = if (USER_LANGUAGE == "fa") {
+//                val parts = task.dateTime!!.trim().split("-")
+//                val jDate = JalaliDate(parts[0].toInt(), parts[1].toInt(), parts[2].toInt())
+//                val gDate = jDate.toGregorian()
+//                "%04d-%02d-%02d".format(gDate[0], gDate[1], gDate[2])
+//            } else {
+//                task.dateTime!!.trim()
+//            }
+            val dateStr = task.dateTime!!.trim()
             val combined = "$dateStr ${task.hourTime!!.trim()}"
             formatter.parse(combined)?.time
         } catch (e: Exception) {

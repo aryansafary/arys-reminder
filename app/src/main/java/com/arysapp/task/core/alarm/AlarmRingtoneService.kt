@@ -48,6 +48,7 @@ class AlarmRingtoneService : Service() {
                 val hourTime = intent.getStringExtra(AlarmIntentFactory.EXTRA_HOUR_TIME)
 
                 stopAlarmSound()
+                @Suppress("DEPRECATION")
                 stopForeground(true)
                 CoroutineScope(Dispatchers.IO).launch {
                     try {
@@ -65,7 +66,8 @@ class AlarmRingtoneService : Service() {
             currentDateTime = intent?.getStringExtra(AlarmIntentFactory.EXTRA_DATE_TIME)
             currentHourTime = intent?.getStringExtra(AlarmIntentFactory.EXTRA_HOUR_TIME)
 
-            val title = intent?.getStringExtra(AlarmIntentFactory.EXTRA_TASK_TITLE) ?: ""
+
+            val title = intent?.getStringExtra(AlarmIntentFactory.EXTRA_TASK_TITLE) ?: "Task Reminder"
             val description = intent?.getStringExtra(AlarmIntentFactory.EXTRA_TASK_DESCRIPTION) ?: "زمان انجام فعالیت فرا رسیده است."
 
             // PendingIntent برای stop action
@@ -78,12 +80,14 @@ class AlarmRingtoneService : Service() {
             )
 
             val notificationId = if (currentTaskId != -1L) currentTaskId.toInt() else 2002
+
             val notification: Notification = TaskNotificationManager.buildAlarmForegroundNotification(
-                this,
-                title,
-                description,
-                stopPending,
-                notificationId
+                context = this,
+                title = title,
+                message = description,
+                stopPendingIntent = stopPending,
+                notificationId = notificationId,
+                taskId = currentTaskId
             )
 
             if (Build.VERSION.SDK_INT >= 34) {

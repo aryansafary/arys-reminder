@@ -4,9 +4,6 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 
-/**
- * ساخت و مرکزی سازی Intent / PendingIntent های آلارم
- */
 object AlarmIntentFactory {
 
     const val EXTRA_TASK_ID = "task_id"
@@ -17,8 +14,6 @@ object AlarmIntentFactory {
     const val EXTRA_HOUR_TIME = "hourTime"
     const val EXTRA_IS_REMINDER_ONLY = "is_reminder_only"
     const val EXTRA_REMINDER_INDEX = "reminder_index"
-
-    // multiplier برای تفکیک requestCode های reminder از due
     const val REMINDER_REQUEST_CODE_MULTIPLIER = 100
 
     fun createReminderPendingIntent(context: Context, task: TaskModel, reminderIndex: Int): PendingIntent {

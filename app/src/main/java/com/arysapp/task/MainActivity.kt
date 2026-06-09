@@ -1,6 +1,9 @@
 package com.arysapp.task
 
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -10,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -33,12 +37,13 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     lateinit var navController: NavHostController
 
-
-
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        configureLockScreenVisibility()
         enableEdgeToEdge()
+
         setContent {
             ArysTaskTheme {
                 navController = rememberNavController()
@@ -55,37 +60,65 @@ class MainActivity : ComponentActivity() {
                         topBar = {
                             MyTopAppBar(
                                 navController = navController,
-                                searchQuery = "",
-                                {},
-                                {},
-                                {
+                                onSettingsClick = {
                                     navController.navigate(Screens.Settings.route)
                                 }
                             )
                         },
                         floatingActionButton = {
-                            MyFloatingActionButton (navController)
+                            MyFloatingActionButton(navController)
                         },
                     ) { innerPadding ->
-                        Column(modifier = Modifier
-                            .fillMaxSize()
-                            .padding(innerPadding)) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(innerPadding)
+                        ) {
                             PermissionRequest { }
                             SetupNavGraph(
                                 navController = navController,
                             )
-
-
                         }
                     }
                 }
 
-
+                LaunchedEffect(intent) {
+                    handleAlarmIntent(intent)
+                }
             }
         }
+    }
 
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        handleAlarmIntent(intent)
+    }
 
+    private fun handleAlarmIntent(intent: Intent?) {
+        if (intent?.getStringExtra("OPEN_SCREEN") == "SHOW_ALARM") {
+            val taskId = intent.getLongExtra("TASK_ID", -1L)
+            val title = intent.getStringExtra("TASK_TITLE") ?: ""
+            val desc = intent.getStringExtra("TASK_DESC") ?: ""
+
+            navController.navigate("${Screens.ShowAlarmScreen.route}?taskId=$taskId&title=$title&desc=$desc") {
+                popUpTo(Screens.Home.route) { inclusive = false }
+            }
+        }
+    }
+
+    private fun configureLockScreenVisibility() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+            setShowWhenLocked(true)
+            setTurnScreenOn(true)
+        } else {
+            @Suppress("DEPRECATION")
+            window.addFlags(
+                WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
+                        WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON or
+                        WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or
+                        WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+            )
+        }
     }
 }
-
-

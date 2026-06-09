@@ -73,5 +73,6 @@
     <string name="restore_success">Restore completed successfully</string>
     <string name="count_insert">Number of tasks added</string>
     <string name="error_restore">Error restoring data</string>
+    <string name="Stop">Stop</string>
 
 </resources>

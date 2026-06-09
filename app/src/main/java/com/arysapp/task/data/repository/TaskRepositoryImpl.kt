@@ -60,5 +60,8 @@ class TaskRepositoryImpl @Inject constructor(
         return taskDao.updateTaskDateTime(id, newDateTime, newHourTime)
     }
 
+    override suspend fun getAllTasksOnce(): List<TaskModel> {
+        return taskDao.getAllTasksOnce().map { it.toDomain() }
+    }
 
 }

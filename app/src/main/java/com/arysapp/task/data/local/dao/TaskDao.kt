@@ -46,4 +46,7 @@ interface TaskDao {
     @Query("UPDATE $TASK_TABLE_NAME SET $COLUMN_TASK_DATE_TIME = :newDateTime, $COLUMN_TASK_HOUR_TIME = :newHourTime WHERE $COLUMN_TASK_ID = :id")
     suspend fun updateTaskDateTime(id: Long, newDateTime: String, newHourTime: String?): Int
 
+    @Query("SELECT * FROM $TASK_TABLE_NAME ORDER BY $COLUMN_TASK_CREATED_AT DESC")
+    suspend fun getAllTasksOnce(): List<TaskEntity>
+
 }

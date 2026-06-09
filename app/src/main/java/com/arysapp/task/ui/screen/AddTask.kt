@@ -22,7 +22,9 @@ import com.arysapp.task.domain.model.RepeatType
 import com.arysapp.task.domain.model.TaskModel
 import com.arysapp.task.ui.components.MyDatePicker
 import com.arysapp.task.ui.components.MyTimePicker
+import com.arysapp.task.ui.theme.parseToGregorianDate
 import com.arysapp.task.ui.viewmodel.TaskViewModel
+import com.arysapp.task.utils.Constants.PERSIAN_LANGUAGE
 import com.arysapp.task.utils.Constants.USER_LANGUAGE
 import com.arysapp.task.utils.helper.JalaliDate
 import java.util.Calendar
@@ -41,7 +43,7 @@ var repeatType by remember { mutableStateOf(taskModel?.repeatType?:RepeatType.NO
 var time by remember { mutableStateOf("") }
 var date by remember {
         mutableStateOf(
-            if (USER_LANGUAGE == "fa")
+            if (USER_LANGUAGE == PERSIAN_LANGUAGE)
                 "${JalaliDate.today().year}-" +
                 "${JalaliDate.today().month.toString().padStart(2, '0')}-" +
                 "${JalaliDate.today().day.toString().padStart(2, '0')} "
@@ -132,6 +134,7 @@ val isEditMode = taskModel != null
     Button(
         enabled = !title.isEmpty() && !date.isEmpty() && !time.isEmpty() && !repeatType.isEmpty(),
         onClick = {
+            val dateTime = if(USER_LANGUAGE==PERSIAN_LANGUAGE)date.parseToGregorianDate() else date
             val (days, weeks, months) = when(repeatType) {
                 RepeatType.DAILY.name -> Triple(1, null, null)
                 RepeatType.WEEKLY.name -> Triple(null, 1, null)
@@ -142,7 +145,7 @@ val isEditMode = taskModel != null
                 taskViewModel.updateTask(taskModel.copy(
                     title = title,
                     description = description,
-                    dateTime = date,
+                    dateTime = dateTime,
                     hourTime = time,
                     repeatType = repeatType,
                     repeatIntervalDays = days,
@@ -153,7 +156,7 @@ val isEditMode = taskModel != null
             taskViewModel.insertTask(
                 title = title,
                 description = description,
-                dateTime = date,
+                dateTime = dateTime,
                 hourTime = time,
                 repeatType = repeatType,
                 repeatIntervalDays = days,
