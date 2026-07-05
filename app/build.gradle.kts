@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
+
 android {
     namespace = "com.arysapp.reminder"
     compileSdk = 37
