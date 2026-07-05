@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">ArysTask</string>
+    <string name="app_name">Arys Reminder</string>
     <string name="title">title</string>
     <string name="description">description</string>
     <string name="Home">Home</string>
     <string name="Calendar">Calendar</string>
     <string name="Settings">Settings</string>
-    <string name="not_found_task">Not Found Any Task</string>
+    <string name="not_found_reminder">Not Found Any Reminder</string>
     <string name="try_again">try Again</string>
     <string name="search">Search</string>
-    <string name="add_task">Add New Task</string>
-    <string name="edit_task">Edit Task</string>
+    <string name="add_reminder">Add New Reminder</string>
+    <string name="edit_reminder">Edit Reminder</string>
     <string name="settings">Settings App</string>
     <string name="select_repeatType">Selecting Repeat Type</string>
     <string name="select_DateTime">Selecting Date Time task </string>
@@ -25,12 +25,12 @@
     <string name="cancel">Cancel</string>
     <string name="select_minutes">Select Minutes</string>
     <string name="select_hour">Select Hour</string>
-    <string name="save_task">Add Task</string>
+    <string name="save_reminder">Add Task</string>
     <string name="Reminder">Reminder</string>
     <string name="Task_Reminder">Reminder Tasks</string>
     <string name="stop">Stop</string>
     <string name="alarm_notif">Notification related to active alarms (sound is played by the service)</string>
-    <string name="task_alarm">Task Alarm</string>
+    <string name="reminder_alarm">Reminder Alarm</string>
     <string name="One_day_until_activity">One day until the start of the activity</string>
     <string name="One_hour_until_activity">One hour until the start of the activity</string>
     <string name="Half_hour_until_activity">Half an hour until the start of the activity</string>
@@ -44,10 +44,10 @@
     <string name="Delete">Delete</string>
     <string name="Cancel">Cancel</string>
     <string name="itemSelected">Selected</string>
-    <string name="delete_task_confirmation">Are you sure you want to delete this Task?</string>
+    <string name="delete_reminder_confirmation">Are you sure you want to delete this Task?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-    <string name="deleteTask">Delete Task</string>
+    <string name="deleteReminder">Delete Task</string>
     <string name="Edit_task">Edit Task</string>
     <string name="back_up">BackUp Data</string>
     <string name="restore">Retore Data</string>
@@ -74,5 +74,6 @@
     <string name="count_insert">Number of tasks added</string>
     <string name="error_restore">Error restoring data</string>
     <string name="Stop">Stop</string>
+
 
 </resources>

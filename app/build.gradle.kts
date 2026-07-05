@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace = "com.arysapp.task"
+    namespace = "com.arysapp.reminder"
     compileSdk = 37
 
     defaultConfig {
-        applicationId = "com.arysapp.task"
+        applicationId = "com.arysapp.reminder"
         minSdk = 24
         targetSdk = 37
         versionCode = 1

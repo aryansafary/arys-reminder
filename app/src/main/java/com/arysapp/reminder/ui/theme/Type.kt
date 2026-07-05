@@ -1,0 +1,154 @@
+package com.arysapp.reminder.ui.theme
+
+import androidx.compose.material3.Typography
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
+import com.arysapp.reminder.R
+import androidx.compose.ui.text.font.Font
+import com.arysapp.reminder.utils.Constants.PERSIAN_LANGUAGE
+import com.arysapp.reminder.utils.Constants.USER_LANGUAGE
+import com.arysapp.reminder.utils.helper.JalaliDate
+
+val fontBold = FontFamily(
+    Font(R.font.vazirmatn_bold)
+)
+val fontMedium = FontFamily(
+    Font(R.font.vazirmatn_medium)
+)
+val fontRegular = FontFamily(
+    Font(R.font.vazirmatn_regular)
+)
+fun String.toDigits(isDate:Boolean = false,language:String = USER_LANGUAGE): String=
+    if(language ==PERSIAN_LANGUAGE) toPersianDigits(text = this , isDate = isDate)
+    else toEnglishDigits(text = this , isDate = isDate )
+
+
+
+private fun toPersianDigits(text:String,isDate: Boolean=false): String {
+    val englishDigits = arrayOf('0','1','2','3','4','5','6','7','8','9')
+    val persianDigits = arrayOf('۰','۱','۲','۳','۴','۵','۶','۷','۸','۹')
+    var result = if(isDate)text.parseToJalaliDate() else text
+    for (i in englishDigits.indices) {
+        result = result.replace(englishDigits[i], persianDigits[i])
+    }
+    return result
+}
+
+private fun toEnglishDigits(text:String,isDate: Boolean=false): String {
+    val englishDigits = arrayOf('0','1','2','3','4','5','6','7','8','9')
+    val persianDigits = arrayOf('۰','۱','۲','۳','۴','۵','۶','۷','۸','۹')
+    var result = if(isDate)text.parseToGregorianDate() else text
+    for (i in persianDigits.indices) {
+        result = result.replace(persianDigits[i], englishDigits[i])
+    }
+    return result
+
+}
+
+fun String.parseToGregorianDate(): String  {
+    val parts = this.trim().split("-")
+    val jDate = JalaliDate(parts[0].toInt(), parts[1].toInt(), parts[2].toInt())
+    val gDate = jDate.toGregorian()
+    return "%04d-%02d-%02d".format(gDate[0], gDate[1], gDate[2])
+}
+fun String.parseToJalaliDate(): String {
+    val parts = this.trim().split("-")
+    val jDate = JalaliDate.fromGregorian(parts[0].toInt(), parts[1].toInt(), parts[2].toInt())
+    return "%04d-%02d-%02d".format(jDate.year, jDate.month, jDate.day)
+}
+
+val Typography = Typography(
+    bodyLarge = TextStyle(
+        fontFamily = fontBold,
+        fontWeight = FontWeight.Bold,
+        fontSize = 24.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.5.sp
+    ),
+    bodyMedium = TextStyle(
+        fontFamily = fontMedium,
+        fontWeight = FontWeight.Medium,
+        fontSize = 16.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.5.sp
+    ),
+    bodySmall = TextStyle(
+        fontFamily = fontRegular,
+        fontWeight = FontWeight.Normal,
+        fontSize = 14.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.5.sp
+    ),
+    labelSmall = TextStyle(
+        fontFamily = fontRegular,
+        fontWeight = FontWeight.Normal,
+        fontSize = 12.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.5.sp
+    ),
+    labelMedium = TextStyle(
+        fontFamily = fontMedium,
+        fontWeight = FontWeight.Medium,
+        fontSize = 14.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.5.sp
+    ),
+    labelLarge = TextStyle(
+        fontFamily = fontBold,
+        fontWeight = FontWeight.Bold,
+        fontSize = 16.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.5.sp
+    ),
+    headlineLarge = TextStyle(
+        fontFamily = fontBold,
+        fontWeight = FontWeight.Bold,
+        fontSize = 24.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.5.sp
+    ),
+    headlineMedium = TextStyle(
+        fontFamily = fontMedium,
+        fontWeight = FontWeight.Medium,
+        fontSize = 20.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.5.sp
+    ),
+    headlineSmall = TextStyle(
+        fontFamily = fontRegular,
+        fontWeight = FontWeight.Normal,
+        fontSize = 18.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.5.sp
+    ),
+    titleLarge = TextStyle(
+        fontFamily = fontBold,
+        fontWeight = FontWeight.Bold,
+        fontSize = 22.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.5.sp
+    ),
+    titleMedium = TextStyle(
+        fontFamily = fontMedium,
+        fontWeight = FontWeight.Medium,
+        fontSize = 20.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.5.sp
+    ),
+    titleSmall = TextStyle(
+        fontFamily = fontRegular,
+        fontWeight = FontWeight.Normal,
+        fontSize = 18.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.5.sp
+    ),
+
+
+
+
+
+
+
+)

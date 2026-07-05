@@ -24,7 +24,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.ArysTask">
+        android:theme="@style/Theme.ArysReminder">
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -33,7 +33,7 @@
             android:showWhenLocked="true"
             android:turnScreenOn="true"
             android:launchMode="singleTop"
-            android:theme="@style/Theme.ArysTask">
+            android:theme="@style/Theme.ArysReminder">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -42,7 +42,7 @@
         </activity>
 
         <receiver
-            android:name=".core.alarm.TaskAlarmReceiver"
+            android:name=".core.alarm.ReminderAlarmReceiver"
             android:enabled="true"
             android:exported="false" />
 
