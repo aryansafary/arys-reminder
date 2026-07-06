@@ -171,7 +171,9 @@ fun ReminderCard(
                 }
             },
             dismissButton = {
-                TextButton(onClick = { }) {
+                TextButton(onClick = {
+                    showDeleteDialog = false
+                }) {
                     Text(text = stringResource(R.string.no))
                 }
             }

@@ -24,7 +24,9 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_two_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.ArysReminder">
+        android:theme="@style/Theme.ArysReminder"
+        android:appCategory="productivity"
+        >
         <activity
             android:name=".MainActivity"
             android:exported="true"

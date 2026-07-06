@@ -21,7 +21,7 @@ import com.arysapp.reminder.core.alarm.AlarmRingtoneService
 object ReminderNotificationManager {
 
     const val CHANNEL_ID_REMINDER = "reminder_channel"
-    const val CHANNEL_ID_ALARM = "alarm_channel"
+    const val CHANNEL_ID_ALARM = "task_alarm_channel"
 
     private const val REMINDER_ID_OFFSET = 10_000
     const val ACTION_STOP_ALARM = "com.arysapp.reminder.action.STOP_ALARM"
@@ -130,13 +130,12 @@ object ReminderNotificationManager {
     ): Notification {
         ensureAlarmChannelExists(context)
 
-        // این اینتنت اکتیویتی اصلی را باز می‌کند
         val fullScreenIntent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
             putExtra("OPEN_SCREEN", "SHOW_ALARM")
-            putExtra("TASK_ID", reminderId)
-            putExtra("TASK_TITLE", title)
-            putExtra("TASK_DESC", message)
+            putExtra("REMINDER_ID", reminderId)
+            putExtra("REMINDER_TITLE", title)
+            putExtra("REMINDER_DESC", message)
         }
 
         val fullScreenPendingIntent = PendingIntent.getActivity(
