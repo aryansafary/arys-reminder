@@ -73,6 +73,7 @@
     <string name="count_insert">تعداد وظایف افزوده شده</string>
     <string name="error_restore">خطا در بازیابی اطلاعات</string>
     <string name="Stop">قطع کردن</string>
+    <string name="not_found_backup">فایل پشتیبانی پیدا نشد</string>
 
 
 </resources>

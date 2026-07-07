@@ -3,9 +3,6 @@ package com.arysapp.reminder.ui.screen
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -19,6 +16,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -52,6 +51,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.arysapp.reminder.R
+import com.arysapp.reminder.ui.theme.toDigits
 import com.arysapp.reminder.ui.viewmodel.DataStoreViewmodel
 import com.arysapp.reminder.ui.viewmodel.SettingsViewModel
 import com.arysapp.reminder.ui.viewmodel.ReminderViewModel
@@ -62,6 +62,9 @@ import com.arysapp.reminder.utils.Constants.USER_LANGUAGE
 import com.arysapp.reminder.utils.RestoreUiState
 import com.arysapp.reminder.utils.ShowSnackBar
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import kotlin.jvm.java
 
 @Composable
@@ -92,8 +95,7 @@ fun SettingsScreen(
     val snackBarHostState = remember { SnackbarHostState() }
     var showBackupDialog by remember { mutableStateOf(false) }
     var showRestoreDialog by remember { mutableStateOf(false) }
-    var selectedRestoreUri by remember { mutableStateOf<Uri?>(null) }
-    val contentResolver = context.contentResolver
+    val backupFiles by settingsViewModel.backupFiles.collectAsState()
 
 
 
@@ -112,29 +114,6 @@ fun SettingsScreen(
             }
         }
     }
-
-
-    val restoreLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent()
-    ) { uri: Uri? ->
-        uri?.let {
-            selectedRestoreUri = it
-        }
-    }
-
-
-    LaunchedEffect(selectedRestoreUri) {
-        selectedRestoreUri?.let { uri ->
-            settingsViewModel.performRestore(context,uri, contentResolver) {
-                reminderViewModel.getAllReminders()
-            }
-        }
-    }
-
-
-
-
-
 
 
 
@@ -274,29 +253,123 @@ fun SettingsScreen(
                     modifier = Modifier.size(24.dp)
                 )
             },
-            modifier = Modifier.clickable { showRestoreDialog = true }
+            modifier = Modifier.clickable {
+                settingsViewModel.loadBackupFiles()
+                showRestoreDialog = true
+            }
         )
         AnimatedVisibility(
             visible = showRestoreDialog,
             enter = fadeIn()
         ) {
+
             AlertDialog(
-                onDismissRequest = { showRestoreDialog = false },
-                title = { Text(stringResource(R.string.restore)) },
-                text = { Text(stringResource(R.string.restore_text)) },
-                confirmButton = {
-                    Button(onClick = {
-                        restoreLauncher.launch("application/json")
-                        showRestoreDialog = false
-                    }) {
-                        Text(stringResource(R.string.select_file))
-                    }
+
+                onDismissRequest = {
+                    showRestoreDialog = false
                 },
-                dismissButton = {
-                    TextButton(onClick = { showRestoreDialog = false }) {
-                        Text(stringResource(R.string.cancel))
+
+
+                title = {
+                    Text(
+                        stringResource(R.string.restore)
+                    )
+                },
+
+
+                text = {
+
+                    if (backupFiles.isEmpty()) {
+
+                        Text(
+                            stringResource(R.string.not_found_backup)
+                        )
+
+                    } else {
+
+
+                        LazyColumn {
+
+
+                            items(backupFiles) { backup ->
+
+
+                                ListItem(
+
+                                    headlineContent = {
+
+                                        Text(
+                                            text = backup.name,
+                                            style = MaterialTheme.typography.titleSmall,
+                                            fontWeight = FontWeight.Medium
+                                        )
+
+                                    },
+
+
+                                    supportingContent = {
+
+                                        Text(
+                                             SimpleDateFormat(
+                                                "yyyy-MM-dd",
+                                                Locale.getDefault()
+                                            ).format(Date(backup.lastModified)
+                                            ).toDigits(USER_LANGUAGE == PERSIAN_LANGUAGE)
+                                                )
+
+                                    },
+
+
+                                    modifier = Modifier
+                                        .clickable {
+
+
+                                            showRestoreDialog = false
+
+
+                                            settingsViewModel
+                                                .performRestoreFromFile(
+                                                    context = context,
+                                                    backupFile = backup.file
+                                                ) {
+
+                                                    reminderViewModel
+                                                        .getAllReminders()
+
+                                                }
+
+                                        }
+
+                                )
+
+
+                                HorizontalDivider()
+
+                            }
+
+                        }
+
                     }
+
+                },
+
+
+                confirmButton = {
+
+                    TextButton(
+                        onClick = {
+                            showRestoreDialog = false
+                        }
+                    ) {
+
+                        Text(
+                            stringResource(R.string.cancel)
+                        )
+
+                    }
+
                 }
+
             )
         }
         HorizontalDivider()

@@ -53,22 +53,22 @@ fun PermissionRequest(onPermissionsGranted: () -> Unit) {
 
     if (hasAllPermissions) {
         onPermissionsGranted()
-    } else {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text("need permission")
-            Spacer(modifier = Modifier.height(16.dp))
-            Button(onClick = {
-                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                    data = Uri.fromParts("package", context.packageName, null)
-                }
-                context.startActivity(intent)
-            }) {
-                Text("Grant Permissions")
-            }
-        }
+//    } else {
+//        Column(
+//            modifier = Modifier.fillMaxSize(),
+//            horizontalAlignment = Alignment.CenterHorizontally,
+//            verticalArrangement = Arrangement.Center
+//        ) {
+//            Text("need permission")
+//            Spacer(modifier = Modifier.height(16.dp))
+//            Button(onClick = {
+//                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+//                    data = Uri.fromParts("package", context.packageName, null)
+//                }
+//                context.startActivity(intent)
+//            }) {
+//                Text("Grant Permissions")
+//            }
+//        }
     }
 }

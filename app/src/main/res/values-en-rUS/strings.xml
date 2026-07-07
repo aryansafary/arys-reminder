@@ -74,6 +74,7 @@
     <string name="count_insert">Number of tasks added</string>
     <string name="error_restore">Error restoring data</string>
     <string name="Stop">Stop</string>
+    <string name="not_found_backup">Not Found BackUp File</string>
 
 
 </resources>
