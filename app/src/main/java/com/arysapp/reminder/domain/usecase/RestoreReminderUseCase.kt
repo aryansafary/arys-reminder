@@ -4,24 +4,22 @@ import com.arysapp.reminder.domain.model.ReminderModel
 import com.arysapp.reminder.domain.repository.ReminderRepository
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import java.io.InputStream
 import javax.inject.Inject
 
 class RestoreRemindersUseCase @Inject constructor(
     private val reminderRepository: ReminderRepository
 ) {
-
-    suspend operator fun invoke(inputStream: InputStream): Result<Int> {
+    suspend operator fun invoke(jsonContent: String): Result<Int> {
         return try {
-
-            val json = inputStream.bufferedReader().use { it.readText() }
+            if (jsonContent.isBlank()) {
+                return Result.failure(IllegalStateException("file is empty"))
+            }
 
             val type = object : TypeToken<List<ReminderModel>>() {}.type
-            val reminders: List<ReminderModel> =
-                Gson().fromJson(json, type) ?: emptyList()
+            val reminders: List<ReminderModel> = Gson().fromJson(jsonContent, type) ?: emptyList()
 
             if (reminders.isEmpty()) {
-                return Result.failure(IllegalStateException("Backup file is empty"))
+                return Result.failure(IllegalStateException("not found any reminder"))
             }
 
             reminderRepository.deleteAllTasks()
@@ -31,9 +29,8 @@ class RestoreRemindersUseCase @Inject constructor(
             }
 
             Result.success(reminders.size)
-
         } catch (e: Exception) {
-            Result.failure(e)
+            Result.failure(Exception("invalid file", e))
         }
     }
 }

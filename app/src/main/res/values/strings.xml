@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">یادآوری آریس</string>
+    <string name="app_name">آریس یادآور</string>
     <string name="title">عنوان</string>
     <string name="description">توضیحات</string>
     <string name="Home">خانه</string>
@@ -58,11 +58,11 @@
     <string name="backup">پشتیبان‌گیری</string>
     <string name="backup_text">همه تسک‌ها به فایل JSON در Downloads ذخیره می‌شود.</string>
     <string name="start_backup">شروع پشتیبان‌گیری</string>
-    <string name="restore_text">فایل JSON از Downloads انتخاب کنید. تسک‌های قدیمی پاک می‌شوند.</string>
+    <string name="restore_text">فایل JSON از محل ذخیره شده انتخاب کنید. یادآور های قدیمی پاک می‌شوند.</string>
     <string name="select_file">انتخاب فایل</string>
-    <string name="empty_backup_task">هیچ وظیفه‌ای برای پشتیبان‌گیری وجود ندارد</string>
+    <string name="empty_backup_task">هیچ یادآوری‌ای برای پشتیبان‌گیری وجود ندارد</string>
     <string name="backup_success">پشتیبان‌گیری با موفقیت انجام شد </string>
-    <string name="error_save_file">خطا در ذخیره فایل</string>
+    <string name="error_save_file">خطا در ذخیره اطلاعات</string>
     <string name="error_save">خطا در ذخیره</string>
     <string name="error_backup">"خطا در پشتیبان‌گیری</string>
     <string name="error">خطا</string>

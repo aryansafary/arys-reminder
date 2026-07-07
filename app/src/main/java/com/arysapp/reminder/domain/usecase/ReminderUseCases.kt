@@ -11,6 +11,5 @@ data class ReminderUseCases @Inject constructor(
     val updateReminderDateTime:UpdateReminderDateTimeUseCase,
     val backupReminders: BackupReminderUseCase,
     val restoreReminders: RestoreRemindersUseCase,
-    val getBackupFiles: GetBackupFilesUseCase,
     val processExpiredReminders: ProcessExpiredRemindersUseCase
 )

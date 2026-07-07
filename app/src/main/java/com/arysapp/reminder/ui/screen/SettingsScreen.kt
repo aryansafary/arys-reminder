@@ -3,6 +3,9 @@ package com.arysapp.reminder.ui.screen
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -16,8 +19,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -51,7 +52,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.arysapp.reminder.R
-import com.arysapp.reminder.ui.theme.toDigits
 import com.arysapp.reminder.ui.viewmodel.DataStoreViewmodel
 import com.arysapp.reminder.ui.viewmodel.SettingsViewModel
 import com.arysapp.reminder.ui.viewmodel.ReminderViewModel
@@ -61,11 +61,9 @@ import com.arysapp.reminder.utils.Constants.PERSIAN_LANGUAGE
 import com.arysapp.reminder.utils.Constants.USER_LANGUAGE
 import com.arysapp.reminder.utils.RestoreUiState
 import com.arysapp.reminder.utils.ShowSnackBar
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-import kotlin.jvm.java
+import kotlinx.coroutines.withContext
 
 @Composable
 fun SettingsScreen(
@@ -82,23 +80,73 @@ fun SettingsScreen(
 
     val rotateAnim by animateFloatAsState(
         targetValue = if (expanded) -90f else 0f,
-        animationSpec = tween(
-            durationMillis = 200
-        )
+        animationSpec = tween(durationMillis = 200),
+        label = "rotateAnim"
     )
 
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
 
     val backupState by settingsViewModel.backupUiState.collectAsState()
     val restoreState by settingsViewModel.restoreUiState.collectAsState()
-    val scope = rememberCoroutineScope()
+
     val snackBarHostState = remember { SnackbarHostState() }
     var showBackupDialog by remember { mutableStateOf(false) }
     var showRestoreDialog by remember { mutableStateOf(false) }
-    val backupFiles by settingsViewModel.backupFiles.collectAsState()
+
+    var pendingBackupData by remember { mutableStateOf<String?>(null) }
+
+    val createDocumentLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.CreateDocument("application/json")
+    ) { uri: Uri? ->
+        uri?.let { destinationUri ->
+            scope.launch(Dispatchers.IO) {
+                try {
+                    context.contentResolver.openOutputStream(destinationUri)?.use { outputStream ->
+                        pendingBackupData?.let { data ->
+                            outputStream.write(data.toByteArray())
+                        }
+                    }
+                    withContext(Dispatchers.Main) {
+                        snackBarHostState.showSnackbar(
+                            context.getString(R.string.backup_success), // پیام موفقیت به منابع string اضافه شود
+                            duration = SnackbarDuration.Short
+                        )
+                    }
+                } catch (_: Exception) {
+                    withContext(Dispatchers.Main) {
+                        snackBarHostState.showSnackbar(context.getString(R.string.error_save_file), duration = SnackbarDuration.Short)
+                    }
+                }
+            }
+        }
+    }
 
 
+    val openDocumentLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.OpenDocument()
+    ) { uri: Uri? ->
+        uri?.let { sourceUri ->
+            scope.launch(Dispatchers.IO) {
+                try {
+                    val jsonContent = context.contentResolver.openInputStream(sourceUri)?.bufferedReader().use { reader ->
+                        reader?.readText()
+                    }
 
+                    if (!jsonContent.isNullOrBlank()) {
+                        withContext(Dispatchers.Main) {
+                            settingsViewModel.performRestoreFromJson(jsonContent)
+                            reminderViewModel.getAllReminders()
+                        }
+                    }
+                } catch (_: Exception) {
+                    withContext(Dispatchers.Main) {
+                        snackBarHostState.showSnackbar(context.getString(R.string.can_not_read_file), duration = SnackbarDuration.Short)
+                    }
+                }
+            }
+        }
+    }
 
     LaunchedEffect(settingsViewModel) {
         settingsViewModel.events.collect { event ->
@@ -115,25 +163,17 @@ fun SettingsScreen(
         }
     }
 
-
-
-
-
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
         ListItem(
-            headlineContent = {
-                Text(stringResource(R.string.language))
-            },
+            headlineContent = { Text(stringResource(R.string.language)) },
             supportingContent = {
                 Text(
-                    if (USER_LANGUAGE == "fa")
-                        stringResource(R.string.persian_lang)
-                    else
-                        stringResource(R.string.english_lang)
+                    if (USER_LANGUAGE == PERSIAN_LANGUAGE) stringResource(R.string.persian_lang)
+                    else stringResource(R.string.english_lang)
                 )
             },
             leadingContent = {
@@ -148,10 +188,8 @@ fun SettingsScreen(
                     IconButton(onClick = { expanded = !expanded }) {
                         Icon(
                             painter = painterResource(
-                                if (USER_LANGUAGE == ENGLISH_LANGUAGE)
-                                    R.drawable.icon_arrow_100px
-                                else
-                                    R.drawable.icon_arrow_100px_2
+                                if (USER_LANGUAGE == ENGLISH_LANGUAGE) R.drawable.icon_arrow_100px
+                                else R.drawable.icon_arrow_100px_2
                             ),
                             contentDescription = null,
                             modifier = Modifier
@@ -165,13 +203,11 @@ fun SettingsScreen(
 
         if (expanded) {
             HorizontalDivider()
-
             Text(
                 text = stringResource(R.string.select_lang),
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Medium
             )
-
             Column(
                 verticalArrangement = Arrangement.SpaceAround,
                 horizontalAlignment = Alignment.Start
@@ -185,16 +221,10 @@ fun SettingsScreen(
                             selected = code == USER_LANGUAGE,
                             onClick = {
                                 expanded = false
-                                dataStoreViewmodel.setLanguage(
-                                    if (code == PERSIAN_LANGUAGE)
-                                        PERSIAN_LANGUAGE
-                                    else
-                                        ENGLISH_LANGUAGE
-                                )
+                                dataStoreViewmodel.setLanguage(if (code == PERSIAN_LANGUAGE) PERSIAN_LANGUAGE else ENGLISH_LANGUAGE)
                                 restartActivity(context = context)
                             }
                         )
-
                         Text(
                             text = label,
                             style = MaterialTheme.typography.labelMedium,
@@ -207,7 +237,6 @@ fun SettingsScreen(
 
         HorizontalDivider()
 
-
         ListItem(
             headlineContent = { Text(stringResource(R.string.back_up)) },
             leadingContent = {
@@ -219,18 +248,22 @@ fun SettingsScreen(
             },
             modifier = Modifier.clickable { showBackupDialog = true }
         )
-        AnimatedVisibility(
-            visible = showBackupDialog,
-            enter = fadeIn()
-        ) {
+
+        AnimatedVisibility(visible = showBackupDialog, enter = fadeIn()) {
             AlertDialog(
                 onDismissRequest = { showBackupDialog = false },
                 title = { Text(stringResource(R.string.backup)) },
-                text =  { Text(stringResource(R.string.backup_text)) },
+                text = { Text(stringResource(R.string.backup_text)) },
                 confirmButton = {
                     Button(onClick = {
                         showBackupDialog = false
-                        settingsViewModel.performBackupToDownloads(context)
+                        settingsViewModel.getBackupDataForExport { jsonData ->
+                            scope.launch(Dispatchers.Main) {
+                                pendingBackupData = jsonData
+                                val fileName = "ArysReminder-Backup_${System.currentTimeMillis()}.json"
+                                createDocumentLauncher.launch(fileName)
+                            }
+                        }
                     }) {
                         Text(stringResource(R.string.start_backup))
                     }
@@ -242,6 +275,7 @@ fun SettingsScreen(
                 }
             )
         }
+
         HorizontalDivider()
 
         ListItem(
@@ -253,125 +287,33 @@ fun SettingsScreen(
                     modifier = Modifier.size(24.dp)
                 )
             },
-            modifier = Modifier.clickable {
-                settingsViewModel.loadBackupFiles()
-                showRestoreDialog = true
-            }
+            modifier = Modifier.clickable { showRestoreDialog = true }
         )
-        AnimatedVisibility(
-            visible = showRestoreDialog,
-            enter = fadeIn()
-        ) {
 
+        AnimatedVisibility(visible = showRestoreDialog, enter = fadeIn()) {
             AlertDialog(
-
-                onDismissRequest = {
-                    showRestoreDialog = false
-                },
-
-
-                title = {
-                    Text(
-                        stringResource(R.string.restore)
-                    )
-                },
-
-
+                onDismissRequest = { showRestoreDialog = false },
+                title = { Text(stringResource(R.string.restore)) },
                 text = {
-
-                    if (backupFiles.isEmpty()) {
-
-                        Text(
-                            stringResource(R.string.not_found_backup)
-                        )
-
-                    } else {
-
-
-                        LazyColumn {
-
-
-                            items(backupFiles) { backup ->
-
-
-                                ListItem(
-
-                                    headlineContent = {
-
-                                        Text(
-                                            text = backup.name,
-                                            style = MaterialTheme.typography.titleSmall,
-                                            fontWeight = FontWeight.Medium
-                                        )
-
-                                    },
-
-
-                                    supportingContent = {
-
-                                        Text(
-                                             SimpleDateFormat(
-                                                "yyyy-MM-dd",
-                                                Locale.getDefault()
-                                            ).format(Date(backup.lastModified)
-                                            ).toDigits(USER_LANGUAGE == PERSIAN_LANGUAGE)
-                                                )
-
-                                    },
-
-
-                                    modifier = Modifier
-                                        .clickable {
-
-
-                                            showRestoreDialog = false
-
-
-                                            settingsViewModel
-                                                .performRestoreFromFile(
-                                                    context = context,
-                                                    backupFile = backup.file
-                                                ) {
-
-                                                    reminderViewModel
-                                                        .getAllReminders()
-
-                                                }
-
-                                        }
-
-                                )
-
-
-                                HorizontalDivider()
-
-                            }
-
-                        }
-
-                    }
-
+                    Text(stringResource(R.string.restore_text))
                 },
-
-
                 confirmButton = {
+                    Button(onClick = {
+                        showRestoreDialog = false
 
-                    TextButton(
-                        onClick = {
-                            showRestoreDialog = false
-                        }
-                    ) {
-
-                        Text(
-                            stringResource(R.string.cancel)
-                        )
-
+                        openDocumentLauncher.launch(arrayOf("application/json"))
+                    }) {
+                        Text(stringResource(R.string.restore))
                     }
-
+                },
+                dismissButton = {
+                    TextButton(onClick = { showRestoreDialog = false }) {
+                        Text(stringResource(R.string.cancel))
+                    }
                 }
-
             )
         }
+
         HorizontalDivider()
 
         SnackbarHost(
