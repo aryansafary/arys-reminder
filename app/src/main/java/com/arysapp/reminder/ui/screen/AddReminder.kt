@@ -135,11 +135,16 @@ val isEditMode = reminderModel != null
         enabled = !title.isEmpty() && !date.isEmpty() && !time.isEmpty() && !repeatType.isEmpty(),
         onClick = {
             val dateTime = if(USER_LANGUAGE==PERSIAN_LANGUAGE)date.parseToGregorianDate() else date
-            val (days, weeks, months) = when(repeatType) {
-                RepeatType.DAILY.name -> Triple(1, null, null)
-                RepeatType.WEEKLY.name -> Triple(null, 1, null)
-                RepeatType.MONTHLY.name -> Triple(null, null, 1)
-                else -> Triple(null, null, null)
+            var days: Int? = null
+            var weeks: Int? = null
+            var months: Int? = null
+            var years: Int? = null // متغیر سالیانه
+
+            when (repeatType) {
+                RepeatType.DAILY.name -> days = 1
+                RepeatType.WEEKLY.name -> weeks = 1
+                RepeatType.MONTHLY.name -> months = 1
+                RepeatType.YEARLY.name -> years = 1
             }
             if(isEditMode)
                 reminderViewModel.updateReminder(reminderModel.copy(
@@ -151,6 +156,7 @@ val isEditMode = reminderModel != null
                     repeatIntervalDays = days,
                     repeatIntervalWeeks = weeks,
                     repeatIntervalMonths = months,
+                    repeatIntervalYears = years,
                     isActive = true
                 )) else
             reminderViewModel.insertReminder(
@@ -161,7 +167,8 @@ val isEditMode = reminderModel != null
                 repeatType = repeatType,
                 repeatIntervalDays = days,
                 repeatIntervalWeeks = weeks,
-                repeatIntervalMonths = months
+                repeatIntervalMonths = months,
+                repeatIntervalYears = years
             )
             navController.popBackStack()
         },

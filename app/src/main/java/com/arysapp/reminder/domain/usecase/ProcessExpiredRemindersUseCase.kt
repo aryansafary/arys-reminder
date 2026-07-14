@@ -16,8 +16,8 @@ class ProcessExpiredRemindersUseCase @Inject constructor(
     private val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
 
     suspend operator fun invoke() {
-        // دریافت یک‌باره تمام تسک‌ها از دیتابیس
-        val tasks = reminderRepository.getAllTasksOnce()
+
+        val reminders = reminderRepository.getAllRemindersOnce()
 
         // زمان فعلی سیستم بدون ثانیه و میلی‌ثانیه برای مقایسه دقیق
         val nowCal = Calendar.getInstance().apply {
@@ -25,26 +25,22 @@ class ProcessExpiredRemindersUseCase @Inject constructor(
             set(Calendar.MILLISECOND, 0)
         }
 
-        tasks.forEach { task ->
-            val dateStr = task.dateTime
-            val timeStr = task.hourTime
+        reminders.forEach { reminder ->
+            val dateStr = reminder.dateTime
+            val timeStr = reminder.hourTime
 
-            // بررسی خالی نبودن تاریخ و ساعت تسک
             if (!dateStr.isNullOrBlank() && !timeStr.isNullOrBlank()) {
                 val taskCal = parseToCalendar(dateStr, timeStr)
 
-                // اگر زمان تسک فرارسیده یا گذشته باشد (منقضی شده)
                 if (taskCal != null && taskCal.before(nowCal) ||taskCal !=null && taskCal == nowCal) {
 
-                    // تشخیص نوع تکرار تسک
-                    val repeatType = runCatching { RepeatType.valueOf(task.repeatType) }
+                    val repeatType = runCatching { RepeatType.valueOf(reminder.repeatType) }
                         .getOrElse { RepeatType.NONE }
 
                     if (repeatType == RepeatType.NONE) {
-                        // 🟢 ایده شما: تسک بدون تکرار منقضی شده، پس کلاً از دیتابیس حذف می‌شود
-                        reminderRepository.deleteTask(task)
+                        reminderRepository.deleteReminder(reminder)
                     } else {
-                        // تسک تکرار شونده است؛ محاسبه زمان آلارم بعدی در آینده
+
                         val nextCal = taskCal.clone() as Calendar
 
                         while (!nextCal.after(nowCal)) {
@@ -52,25 +48,22 @@ class ProcessExpiredRemindersUseCase @Inject constructor(
                                 RepeatType.DAILY -> nextCal.add(Calendar.DAY_OF_YEAR, 1)
                                 RepeatType.WEEKLY -> nextCal.add(Calendar.WEEK_OF_YEAR, 1)
                                 RepeatType.MONTHLY -> nextCal.add(Calendar.MONTH, 1)
+                                RepeatType.YEARLY -> nextCal.add(Calendar.YEAR, 1)
                                 else -> nextCal.add(Calendar.DAY_OF_YEAR, 1)
                             }
                         }
 
-                        // به‌روزرسانی تسک با تاریخ جدید
-                        val updatedTask = task.copy(
+                        val updatedTask = reminder.copy(
                             dateTime = dateFormat.format(nextCal.time),
                             updatedAt = nowAsString()
                         )
-                        reminderRepository.updateTask(updatedTask)
+                        reminderRepository.updateReminder(updatedTask)
                     }
                 }
             }
         }
     }
 
-    /**
-     * تبدیل رشته تاریخ و ساعت به یک شیء Calendar واحد و دقیق
-     */
     private fun parseToCalendar(dateStr: String, timeStr: String): Calendar? {
         return try {
             val parsedDate: Date = dateFormat.parse(dateStr) ?: return null

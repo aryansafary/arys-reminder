@@ -55,6 +55,7 @@ class ReminderViewModel @Inject constructor(
         repeatIntervalDays: Int? = null,
         repeatIntervalWeeks: Int? = null,
         repeatIntervalMonths: Int? = null,
+        repeatIntervalYears: Int? = null,
         reminderMinutesBefore: Int? = null
     ) {
         viewModelScope.launch {
@@ -62,7 +63,7 @@ class ReminderViewModel @Inject constructor(
             val result = reminderUseCases.insertReminder(
                 title, description, dateTime, hourTime,
                 repeatType, repeatIntervalDays, repeatIntervalWeeks,
-                repeatIntervalMonths, reminderMinutesBefore
+                repeatIntervalMonths, repeatIntervalYears,reminderMinutesBefore
             )
             if (result.isSuccess) {
                 refreshRemindersWithProcessing()

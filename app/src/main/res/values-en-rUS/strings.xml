@@ -1,80 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Arys Reminder</string>
-    <string name="title">title</string>
-    <string name="description">description</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
     <string name="Home">Home</string>
     <string name="Calendar">Calendar</string>
     <string name="Settings">Settings</string>
-    <string name="not_found_reminder">Not Found Any Reminder</string>
-    <string name="try_again">try Again</string>
+    <string name="not_found_reminder">No Reminders Found</string>
+    <string name="try_again">Try Again</string>
     <string name="search">Search</string>
     <string name="add_reminder">Add New Reminder</string>
     <string name="edit_reminder">Edit Reminder</string>
-    <string name="settings">Settings App</string>
-    <string name="select_repeatType">Selecting Repeat Type</string>
-    <string name="select_DateTime">Selecting Date Time task </string>
-    <string name="select_Time">Selecting Time task</string>
+    <string name="settings">App Settings</string>
+
+    <!-- Selections -->
+    <string name="select_repeatType">Select Repeat Type</string>
+    <string name="select_DateTime">Select Date &amp; Time</string>
+    <string name="select_Time">Select Time</string>
+    <string name="selecting_date">Select Date</string>
+    <string name="selecting_time">Select Time</string>
+    <string name="select_minutes">Select Minutes</string>
+    <string name="select_hour">Select Hour</string>
+
+    <!-- Repeat Options -->
     <string name="repeat_none">None</string>
     <string name="repeat_daily">Daily</string>
     <string name="repeat_weekly">Weekly</string>
     <string name="repeat_monthly">Monthly</string>
-    <string name="selecting_date">Selecting Date</string>
-    <string name="selecting_time">Selecting Time</string>
+    <string name="yearly_repeat">Yearly</string>
+
+    <!-- Actions -->
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
-    <string name="select_minutes">Select Minutes</string>
-    <string name="select_hour">Select Hour</string>
-    <string name="save_reminder">Add Task</string>
-    <string name="Reminder">Reminder</string>
-    <string name="Task_Reminder">Reminder Tasks</string>
+    <string name="Cancel">Cancel</string>
+    <string name="save_reminder">Save Reminder</string>
     <string name="stop">Stop</string>
-    <string name="alarm_notif">Notification related to active alarms (sound is played by the service)</string>
-    <string name="reminder_alarm">Reminder Alarm</string>
-    <string name="One_day_until_activity">One day until the start of the activity</string>
-    <string name="One_hour_until_activity">One hour until the start of the activity</string>
-    <string name="Half_hour_until_activity">Half an hour until the start of the activity</string>
-    <string name="Fifteen_minutes_until_activity">Fifteen minutes until the activity starts.</string>
-    <string name="One_minutes_until_activity">one Minutes until the start of the activity</string>
-    <string name="At_time_of_activity">Activity execution time</string>
-    <string name="twelve_hour_until_activity">Twelve hours left until the activity starts.</string>
-    <string name="All">All</string>
-    <string name="ActiveTask">TurnOn</string>
+    <string name="Stop">Stop</string>
+    <string name="ActiveTask">Turn On</string>
     <string name="Edit">Edit</string>
     <string name="Delete">Delete</string>
-    <string name="Cancel">Cancel</string>
-    <string name="itemSelected">Selected</string>
-    <string name="delete_reminder_confirmation">Are you sure you want to delete this Task?</string>
+    <string name="deleteReminder">Delete Reminder</string>
+    <string name="Edit_task">Edit Reminder</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-    <string name="deleteReminder">Delete Task</string>
-    <string name="Edit_task">Edit Task</string>
-    <string name="back_up">BackUp Data</string>
-    <string name="restore">Retore Data</string>
-    <string name="about_me">About Me</string>
-    <string name="language">Language App</string>
-    <string name="english_lang">English</string>
-    <string name="persian_lang">فارسی</string>
-    <string name="select_lang">Selecting Language</string>
+
+    <string name="Task_Reminder">Reminders</string>
+    <string name="itemSelected">Selected</string>
+    <string name="delete_reminder_confirmation">Are you sure you want to delete this reminder?</string>
+    <string name="All">All</string>
+
+    <!-- Alarms & Notifications -->
+    <string name="alarm_notif">Notifications for active alarms (sound is played by the service)</string>
+    <string name="reminder_alarm">Reminder Alarm</string>
+    <string name="Reminder">Reminder:</string>
+
+    <!-- Backup & Restore -->
+    <string name="back_up">Backup Data</string>
+    <string name="restore">Restore Data</string>
     <string name="backup">Backup</string>
-    <string name="backup_text">All tasks will be saved as a JSON file in Downloads.</string>
-    <string name="start_backup">Start backup</string>
-    <string name="restore_text">Select a JSON file from Downloads. Existing tasks will be deleted.</string>
-    <string name="select_file">Select file</string>
-    <string name="empty_backup_task">No tasks to backup</string>
+    <string name="start_backup">Start Backup</string>
+    <string name="backup_text">All reminders will be saved as a JSON file in Downloads.</string>
+    <string name="restore_text">Select a JSON file from Downloads. Existing reminders will be deleted.</string>
+    <string name="select_file">Select File</string>
+    <string name="empty_backup_task">No reminders to backup</string>
     <string name="backup_success">Backup completed successfully</string>
+    <string name="restore_success">Restore completed successfully</string>
+    <string name="count_insert">Number of reminders added</string>
+    <string name="not_found_backup">Backup file not found</string>
+
+    <!-- Errors -->
     <string name="error_save_file">Error saving file</string>
     <string name="error_save">Error saving</string>
     <string name="error_backup">Backup error</string>
+    <string name="error_restore">Error restoring data</string>
     <string name="error">Error</string>
     <string name="invalid_file">Invalid file!</string>
     <string name="can_not_read_file">Cannot read file</string>
     <string name="empty_file">File is empty</string>
-    <string name="restore_success">Restore completed successfully</string>
-    <string name="count_insert">Number of tasks added</string>
-    <string name="error_restore">Error restoring data</string>
-    <string name="Stop">Stop</string>
-    <string name="not_found_backup">Not Found BackUp File</string>
 
+    <!-- Settings -->
+    <string name="about_me">About Me</string>
+    <string name="language">App Language</string>
+    <string name="english_lang">English</string>
+    <string name="persian_lang">فارسی</string>
+    <string name="select_lang">Select Language</string>
 
+    <!-- Time Intervals -->
+    <string name="one_month_until_activity">1 Month left until</string>
+    <string name="fifteen_days_until_activity">15 Days left until</string>
+    <string name="one_week_until_activity">1 Week left until</string>
+    <string name="three_days_until_activity">3 Days left until</string>
+    <string name="one_day_until_activity">1 Day left until</string>
+    <string name="twelve_hour_until_activity">12 Hours left until</string>
+    <string name="six_hour_until_activity">6 Hours left until</string>
+    <string name="three_hour_until_activity">3 Hours left until</string>
+    <string name="one_hour_until_activity">1 Hour left until</string>
+    <string name="half_hour_until_activity">30 Minutes left until</string>
+    <string name="fifteen_minutes_until_activity">15 Minutes left until</string>
+    <string name="One_minutes_until_activity">1 Minute left until</string>
+    <string name="at_time_of_activity">It is time for</string>
+
+    <!-- Deprecated / Alternate Time Strings (Kept to prevent breaking code, but fixed grammar) -->
+    <string name="One_day_until_activity">1 Day left until the activity starts</string>
+    <string name="One_hour_until_activity">1 Hour left until the activity starts</string>
+    <string name="Half_hour_until_activity">30 Minutes left until the activity starts</string>
+    <string name="Fifteen_minutes_until_activity">15 Minutes left until the activity starts</string>
+    <string name="At_time_of_activity">It is time for the activity</string>
 </resources>

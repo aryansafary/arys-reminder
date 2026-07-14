@@ -23,13 +23,19 @@ class ReminderScheduler @Inject constructor(
     private val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     private val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
 
+    // مقادیر دقیق میلی‌ثانیه برای زمان‌های جدید (استفاده از L الزامی است تا Overflow نشود)
     private val reminderOffsets = listOf(
-        24 * 60 * 60 * 1000L, // 1 day before
-        12 * 60 * 60 * 1000L, // 12 hours before
-        60 * 60 * 1000L,      // 1 hour before
-        30 * 60 * 1000L,      // 30 minutes before
-        5 * 60 * 1000L,       // 5 minutes before
-        60 * 1000L            // 1 minute before
+        30L * 24 * 60 * 60 * 1000L, // 1 month before (~30 days)
+        15L * 24 * 60 * 60 * 1000L, // 15 days before
+        7L * 24 * 60 * 60 * 1000L,  // 1 week before
+        3L * 24 * 60 * 60 * 1000L,  // 3 days before
+        24L * 60 * 60 * 1000L,      // 1 day before
+        12L * 60 * 60 * 1000L,      // 12 hours before
+        6L * 60 * 60 * 1000L,       // 6 hours before
+        3L * 60 * 60 * 1000L,       // 3 hours before
+        60L * 60 * 1000L,           // 1 hour before
+        30L * 60 * 1000L,           // 30 minutes before
+        15L * 60 * 1000L            // 15 minutes before
     )
 
     suspend fun scheduleAllReminders() {
@@ -105,14 +111,6 @@ class ReminderScheduler @Inject constructor(
 
     private fun parseDueTime(reminder: ReminderModel): Long? {
         return try {
-//            val dateStr = if (USER_LANGUAGE == "fa") {
-//                val parts = reminder.dateTime!!.trim().split("-")
-//                val jDate = JalaliDate(parts[0].toInt(), parts[1].toInt(), parts[2].toInt())
-//                val gDate = jDate.toGregorian()
-//                "%04d-%02d-%02d".format(gDate[0], gDate[1], gDate[2])
-//            } else {
-//                reminder.dateTime!!.trim()
-//            }
             val dateStr = reminder.dateTime!!.trim()
             val combined = "$dateStr ${reminder.hourTime!!.trim()}"
             formatter.parse(combined)?.time

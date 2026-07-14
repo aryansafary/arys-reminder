@@ -50,6 +50,10 @@ class ReminderRepeatHandler @Inject constructor(
                     val newDate = incrementMonth(dateStr)
                     reminderUseCases.updateReminderDateTime(reminderId, newDate, hourTime)
                 }
+                "YEARLY" -> {
+                    val newDate = incrementYear(dateStr)
+                    reminderUseCases.updateReminderDateTime(reminderId, newDate, hourTime)
+                }
                 else -> {
                     reminderUseCases.updateReminderStatus(reminderId, false)
                 }
@@ -85,6 +89,20 @@ class ReminderRepeatHandler @Inject constructor(
             val cal = Calendar.getInstance().apply {
                 time = dateFormatter.parse(dateStr) ?: return dateStr
                 add(Calendar.MONTH, 1)
+            }
+            dateFormatter.format(cal.time)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            dateStr
+        }
+    }
+
+    private fun incrementYear(dateStr: String?): String {
+        if (dateStr.isNullOrBlank()) return dateStr ?: ""
+        return try {
+            val cal = Calendar.getInstance().apply {
+                time = dateFormatter.parse(dateStr) ?: return dateStr
+                add(Calendar.YEAR, 1) // اضافه کردن دقیقا ۱ سال
             }
             dateFormatter.format(cal.time)
         } catch (e: Exception) {

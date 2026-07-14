@@ -8,35 +8,35 @@ import javax.inject.Inject
 class UpdateReminderUseCase @Inject constructor(
     private val reminderRepository: ReminderRepository
 ) {
-    suspend operator fun invoke(task: ReminderModel): Result<Int> {
+    suspend operator fun invoke(reminder: ReminderModel): Result<Int> {
         return try {
-            if (task.title.isBlank()) {
+            if (reminder.title.isBlank()) {
                 return Result.failure(IllegalArgumentException("عنوان تسک نمی‌تواند خالی باشد"))
             }
 
-            // اعتبارسنجی repeatType
             val validRepeatTypes = RepeatType.entries.map { it.name }
-            val validatedRepeatType = if (task.repeatType in validRepeatTypes) {
-                task.repeatType
+            val validatedRepeatType = if (reminder.repeatType in validRepeatTypes) {
+                reminder.repeatType
             } else {
                 return Result.failure(IllegalArgumentException("نوع تکرار نامعتبر است"))
             }
 
 
             if (validatedRepeatType != RepeatType.NONE.name &&
-                task.repeatIntervalDays == null &&
-                task.repeatIntervalWeeks == null &&
-                task.repeatIntervalMonths == null
+                reminder.repeatIntervalDays == null &&
+                reminder.repeatIntervalWeeks == null &&
+                reminder.repeatIntervalMonths == null &&
+                reminder.repeatIntervalYears == null
             ) {
                 return Result.failure(IllegalArgumentException("برای تسک تکراری باید حداقل یک بازه زمانی مشخص شود"))
             }
 
-            val updatedTask = task.copy(
+            val updatedTask = reminder.copy(
                 updatedAt = ""//LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
             )
 
 
-            val result = reminderRepository.updateTask(updatedTask)
+            val result = reminderRepository.updateReminder(updatedTask)
             Result.success(result)
         } catch (e: Exception) {
             Result.failure(e)

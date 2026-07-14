@@ -10,7 +10,7 @@ class BackupReminderUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(): Result<String> {
         return try {
-            val tasks = reminderRepository.getAllTasks().first()
+            val tasks = reminderRepository.getAllReminders().first()
 
             if (tasks.isEmpty()) {
                 return Result.failure(IllegalStateException("not found any reminder for backup"))

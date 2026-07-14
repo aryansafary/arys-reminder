@@ -12,6 +12,7 @@ data class ReminderModel(
     val repeatIntervalDays: Int? = null,
     val repeatIntervalWeeks: Int? = null,
     val repeatIntervalMonths: Int? = null,
+    val repeatIntervalYears: Int? = null,
     val isActive: Boolean = true,
     val reminderMinutesBefore: Int? = null,
     val createdAt: String,

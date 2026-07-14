@@ -13,6 +13,7 @@ object ConstantsDatabase {
     const val COLUMN_REMINDER_REPEAT_INTERVAL_DAYS = "reminder_repeat_interval_days"
     const val COLUMN_REMINDER_REPEAT_INTERVAL_WEEKS = "reminder_repeat_interval_weeks"
     const val COLUMN_REMINDER_REPEAT_INTERVAL_MONTHS = "reminder_repeat_interval_months"
+    const val COLUMN_REMINDER_REPEAT_INTERVAL_YEARS = "reminder_repeat_interval_years"
     const val COLUMN_REMINDER_IS_ACTIVE = "reminder_is_active"
     const val COLUMN_REMINDER_REMINDER_MINUTES_BEFORE = "reminder_reminder_minutes_before"
     const val COLUMN_REMINDER_CREATED_AT = "reminder_created_at"

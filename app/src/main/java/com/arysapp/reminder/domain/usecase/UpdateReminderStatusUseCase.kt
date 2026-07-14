@@ -8,7 +8,7 @@ class UpdateReminderStatusUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(id: Long, isActive: Boolean): Result<Int> {
         return try {
-            val result = reminderRepository.updateTaskStatus(id, isActive)
+            val result = reminderRepository.updateReminderStatus(id, isActive)
             Result.success(result)
         } catch (e: Exception) {
             Result.failure(e)

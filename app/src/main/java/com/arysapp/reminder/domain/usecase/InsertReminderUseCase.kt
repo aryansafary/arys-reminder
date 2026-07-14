@@ -17,6 +17,7 @@ class InsertReminderUseCase @Inject constructor(
         repeatIntervalDays: Int? = null,
         repeatIntervalWeeks: Int? = null,
         repeatIntervalMonths: Int? = null,
+        repeatIntervalYears: Int? = null,
         reminderMinutesBefore: Int? = null
     ): Result<Long> {
         return try {
@@ -28,7 +29,8 @@ class InsertReminderUseCase @Inject constructor(
             if (validatedRepeatType != RepeatType.NONE.name &&
                 repeatIntervalDays == null &&
                 repeatIntervalWeeks == null &&
-                repeatIntervalMonths == null) {
+                repeatIntervalMonths == null &&
+                repeatIntervalYears == null) {
                 return Result.failure(IllegalArgumentException("برای تسک تکراری باید حداقل یک بازه زمانی مشخص شود"))
             }
            // val currentTime = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
@@ -41,12 +43,13 @@ class InsertReminderUseCase @Inject constructor(
                 repeatIntervalDays = repeatIntervalDays,
                 repeatIntervalWeeks = repeatIntervalWeeks,
                 repeatIntervalMonths = repeatIntervalMonths,
+                repeatIntervalYears = repeatIntervalYears,
                 isActive = true,
                 reminderMinutesBefore = reminderMinutesBefore,
                 createdAt = "currentTime",
                 updatedAt = "currentTime"
             )
-            val taskId = reminderRepository.insertTask(task)
+            val taskId = reminderRepository.insertReminder(task)
             Result.success(taskId)
         } catch (e: Exception) {
             Result.failure(e)

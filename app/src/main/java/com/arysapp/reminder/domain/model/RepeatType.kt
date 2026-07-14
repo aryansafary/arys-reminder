@@ -8,7 +8,8 @@ enum class RepeatType {
     NONE,
     DAILY,
     WEEKLY,
-    MONTHLY;
+    MONTHLY,
+    YEARLY;
     @Composable
     fun getLabel(): String {
         return when (this) {
@@ -16,6 +17,7 @@ enum class RepeatType {
             DAILY -> stringResource(R.string.repeat_daily)
             WEEKLY -> stringResource(R.string.repeat_weekly)
             MONTHLY -> stringResource(R.string.repeat_monthly)
+            YEARLY -> stringResource(R.string.yearly_repeat)
         }
     }
 }

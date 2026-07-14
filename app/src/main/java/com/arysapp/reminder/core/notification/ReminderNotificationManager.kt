@@ -154,7 +154,7 @@ object ReminderNotificationManager {
             .setCategory(NotificationCompat.CATEGORY_ALARM)
             .setFullScreenIntent(fullScreenPendingIntent, true)
             .setAutoCancel(false)
-            .addAction(R.drawable.settings_outlined, context.getString(R.string.stop), stopPendingIntent)
+            .addAction(R.drawable.stop, context.getString(R.string.stop), stopPendingIntent)
             .build()
     }
 

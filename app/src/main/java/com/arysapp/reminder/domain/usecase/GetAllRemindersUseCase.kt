@@ -9,6 +9,6 @@ class GetAllRemindersUseCase @Inject constructor(
     private val reminderRepository: ReminderRepository
 ) {
     operator fun invoke(): Flow<List<ReminderModel>> {
-        return reminderRepository.getAllTasks()
+        return reminderRepository.getAllReminders()
     }
 }

@@ -14,6 +14,7 @@ import com.arysapp.reminder.utils.ConstantsDatabase.COLUMN_REMINDER_REPEAT_INTER
 import com.arysapp.reminder.utils.ConstantsDatabase.COLUMN_REMINDER_REPEAT_INTERVAL_WEEKS
 import com.arysapp.reminder.utils.ConstantsDatabase.COLUMN_REMINDER_REPEAT_TYPE
 import com.arysapp.reminder.utils.ConstantsDatabase.COLUMN_REMINDER_DATE_TIME
+import com.arysapp.reminder.utils.ConstantsDatabase.COLUMN_REMINDER_REPEAT_INTERVAL_YEARS
 import com.arysapp.reminder.utils.ConstantsDatabase.COLUMN_REMINDER_TITLE
 import com.arysapp.reminder.utils.ConstantsDatabase.COLUMN_REMINDER_UPDATED_AT
 import com.arysapp.reminder.utils.ConstantsDatabase.REMINDER_TABLE_NAME
@@ -47,6 +48,9 @@ data class ReminderEntity(
 
     @ColumnInfo(name = COLUMN_REMINDER_REPEAT_INTERVAL_MONTHS)
     val repeatIntervalMonths: Int? = null,
+
+    @ColumnInfo(name = COLUMN_REMINDER_REPEAT_INTERVAL_YEARS)
+    val repeatIntervalYears: Int? = null,
 
     @ColumnInfo(name = COLUMN_REMINDER_IS_ACTIVE)
     val isActive: Boolean = true,

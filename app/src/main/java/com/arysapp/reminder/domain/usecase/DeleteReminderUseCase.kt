@@ -9,7 +9,7 @@ class DeleteReminderUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(task: ReminderModel): Result<Int> {
         return try {
-            val result = reminderRepository.deleteTask(task)
+            val result = reminderRepository.deleteReminder(task)
             Result.success(result)
         } catch (e: Exception) {
             Result.failure(e)

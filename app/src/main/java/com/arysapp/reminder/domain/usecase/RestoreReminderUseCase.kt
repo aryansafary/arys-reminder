@@ -22,10 +22,10 @@ class RestoreRemindersUseCase @Inject constructor(
                 return Result.failure(IllegalStateException("not found any reminder"))
             }
 
-            reminderRepository.deleteAllTasks()
+            reminderRepository.deleteAllReminders()
 
             reminders.forEach {
-                reminderRepository.insertTask(it)
+                reminderRepository.insertReminder(it)
             }
 
             Result.success(reminders.size)

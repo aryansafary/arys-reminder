@@ -13,54 +13,54 @@ class ReminderRepositoryImpl @Inject constructor(
     private val reminderDao: ReminderDao
 ) : ReminderRepository {
 
-    override fun getAllTasks(): Flow<List<ReminderModel>> {
+    override fun getAllReminders(): Flow<List<ReminderModel>> {
         return reminderDao.getAllReminder().map { entities ->
             entities.map { it.toDomain() }
         }
     }
 
-    override fun getActiveTasks(): Flow<List<ReminderModel>> {
+    override fun getActiveReminders(): Flow<List<ReminderModel>> {
         return reminderDao.getActiveReminder().map { entities ->
             entities.map { it.toDomain() }
         }
     }
 
-    override suspend fun getTaskById(id: Long): ReminderModel? {
+    override suspend fun getReminderById(id: Long): ReminderModel? {
         return reminderDao.getReminderById(id)?.toDomain()
     }
 
-    override suspend fun insertTask(task: ReminderModel): Long {
-        return reminderDao.insertReminder(task.toEntity())
+    override suspend fun insertReminder(reminder: ReminderModel): Long {
+        return reminderDao.insertReminder(reminder.toEntity())
     }
 
-    override suspend fun insertTasks(tasks: List<ReminderModel>): List<Long> {
-        return reminderDao.insertReminders(tasks.map { it.toEntity() })
+    override suspend fun insertReminders(reminders: List<ReminderModel>): List<Long> {
+        return reminderDao.insertReminders(reminders.map { it.toEntity() })
     }
 
-    override suspend fun updateTask(task: ReminderModel): Int {
-        return reminderDao.updateReminder(task.toEntity())
+    override suspend fun updateReminder(reminder: ReminderModel): Int {
+        return reminderDao.updateReminder(reminder.toEntity())
     }
 
-    override suspend fun deleteTask(task: ReminderModel): Int {
-        return reminderDao.deleteReminder(task.toEntity())
+    override suspend fun deleteReminder(reminder: ReminderModel): Int {
+        return reminderDao.deleteReminder(reminder.toEntity())
     }
 
-    override suspend fun deleteAllTasks(): Int = reminderDao.deleteAll()
+    override suspend fun deleteAllReminders(): Int = reminderDao.deleteAll()
 
-    override suspend fun deleteTaskById(id: Long): Int {
+    override suspend fun deleteReminderById(id: Long): Int {
         return reminderDao.deleteReminderById(id)
     }
 
-    override suspend fun updateTaskStatus(id: Long, isActive: Boolean): Int {
+    override suspend fun updateReminderStatus(id: Long, isActive: Boolean): Int {
         return reminderDao.updateReminderStatus(id, isActive)
     }
 
 
-    override suspend fun updateTaskDateTime(id: Long, newDateTime: String, newHourTime: String?): Int {
+    override suspend fun updateReminderDateTime(id: Long, newDateTime: String, newHourTime: String?): Int {
         return reminderDao.updateReminderDateTime(id, newDateTime, newHourTime)
     }
 
-    override suspend fun getAllTasksOnce(): List<ReminderModel> {
+    override suspend fun getAllRemindersOnce(): List<ReminderModel> {
         return reminderDao.getAllRemindersOnce().map { it.toDomain() }
     }
 
