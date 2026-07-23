@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -21,6 +22,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.arysapp.reminder.domain.model.ReminderModel
 import com.arysapp.reminder.ui.components.ReminderCard
 import com.arysapp.reminder.ui.viewmodel.ReminderViewModel
@@ -62,11 +67,7 @@ fun HomeScreen(
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Text(
-                                text = stringResource(R.string.not_found_reminder),
-                                style = MaterialTheme.typography.titleMedium,
-                                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
-                            )
+EmptyStateLottie()
                         }
                     } else {
                         LazyColumn(
@@ -85,7 +86,7 @@ fun HomeScreen(
                                         navController.navigate(Screens.AddReminder.withArgs(reminderJson))
 
                                     },
-                                    onDelete = { deletedReminder ->
+                                    onDelete = { reminder ->
                                         viewModel.deleteReminder(reminder)
                                     },
                                     onToggle = { newState ->
@@ -119,6 +120,24 @@ fun HomeScreen(
                 }
             }
         }
+    }
+}
+
+@Composable
+fun EmptyStateLottie() {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.empty_anim))
+        LottieAnimation(
+            composition = composition,
+            iterations = LottieConstants.IterateForever,
+            modifier = Modifier.size(250.dp)
+        )
+        Text(text = stringResource(R.string.not_found_reminder),
+            style = MaterialTheme.typography.bodyLarge)
     }
 }
 

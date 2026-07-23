@@ -106,4 +106,5 @@
     <string name="Half_hour_until_activity">30 Minutes left until the activity starts</string>
     <string name="Fifteen_minutes_until_activity">15 Minutes left until the activity starts</string>
     <string name="At_time_of_activity">It is time for the activity</string>
+    <string name="calendar">Calendar</string>
 </resources>

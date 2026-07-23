@@ -7,6 +7,11 @@ import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -22,10 +27,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.arysapp.reminder.navigation.Screens
 import com.arysapp.reminder.navigation.SetupNavGraph
+import com.arysapp.reminder.navigation.bottombar.MyBottomBar
 import com.arysapp.reminder.navigation.topbar.MyTopAppBar
 import com.arysapp.reminder.ui.components.AppConfig
 import com.arysapp.reminder.ui.components.ChangeStatusBarColor
-import com.arysapp.reminder.ui.components.MyFloatingActionButton
 import com.arysapp.reminder.ui.components.PermissionRequest
 import com.arysapp.reminder.ui.theme.ArysReminderTheme
 import com.arysapp.reminder.utils.Constants.PERSIAN_LANGUAGE
@@ -65,9 +70,24 @@ class MainActivity : ComponentActivity() {
                                 }
                             )
                         },
-                        floatingActionButton = {
-                            MyFloatingActionButton(navController)
-                        },
+                        bottomBar = {
+                            AnimatedVisibility(
+                                visible = true,
+                                enter = slideInVertically(initialOffsetY = { it }) + fadeIn(),
+                                exit = slideOutVertically(targetOffsetY = { it }) + fadeOut()
+                            ) {
+                                MyBottomBar(
+                                    navController = navController,
+                                    onItemClicked = {
+                                        navController.navigate(it.route)
+                                    },
+                                    onFabClick = {
+                                        navController.navigate(Screens.AddReminder.route)
+                                    }
+                                )
+                            }
+                        }
+
                     ) { innerPadding ->
                         Column(
                             modifier = Modifier

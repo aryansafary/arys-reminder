@@ -26,7 +26,7 @@ fun MyTopAppBar(
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
 
-    if (currentRoute == Screens.Home.route) {
+    if (currentRoute == Screens.Home.route || currentRoute == Screens.Calender.route) {
         TopAppBar(
             modifier = modifier,
             title = {

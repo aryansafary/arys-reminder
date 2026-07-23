@@ -106,5 +106,6 @@
     <string name="Fifteen_minutes_until_activity">پانزده دقیقه تا شروع یادآوری</string>
     <string name="One_minutes_until_activity">یک دقیقه تا شروع یادآوری</string>
     <string name="At_time_of_activity">زمان یادآوری</string>
+    <string name="calendar">تقویم</string>
 
 </resources>

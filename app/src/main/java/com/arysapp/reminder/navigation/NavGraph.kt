@@ -14,22 +14,34 @@ import com.arysapp.reminder.core.alarm.AlarmRingtoneService
 import com.arysapp.reminder.core.notification.ReminderNotificationManager
 import com.arysapp.reminder.domain.model.ReminderModel
 import com.arysapp.reminder.ui.screen.AddReminderScreen
+import com.arysapp.reminder.ui.screen.CalendarScreen
 import com.arysapp.reminder.ui.screen.HomeScreen
 import com.arysapp.reminder.ui.screen.SettingsScreen
 import com.arysapp.reminder.ui.screen.ShowAlarmScreen
 import com.google.gson.Gson
 
 @Composable
-fun SetupNavGraph(navController: NavHostController) {
+fun SetupNavGraph(
+    navController: NavHostController,
+) {
     NavHost(
         navController = navController,
         startDestination = Screens.Home.route
     ) {
-        composable(route = Screens.Home.route) {
+        composable(route = Screens.Home.route,
+            enterTransition = Screens.Home.enterTransition,
+            exitTransition = Screens.Home.exitTransition,
+            popEnterTransition = Screens.Home.popEnterTransition,
+            popExitTransition = Screens.Home.popExitTransition
+            ) {
             HomeScreen(navController = navController)
         }
 
         composable(route = Screens.AddReminder.route + "?args={task}",
+            enterTransition = Screens.AddReminder.enterTransition,
+            exitTransition = Screens.AddReminder.exitTransition,
+            popEnterTransition = Screens.AddReminder.popEnterTransition,
+            popExitTransition = Screens.AddReminder.popExitTransition,
             arguments = listOf(
                 navArgument("task") {
                     type = NavType.StringType
@@ -47,12 +59,21 @@ fun SetupNavGraph(navController: NavHostController) {
                 )
         }
 
-        composable(route = Screens.Settings.route) {
+        composable(route = Screens.Settings.route,
+            enterTransition = Screens.Settings.enterTransition,
+            exitTransition = Screens.Settings.exitTransition,
+            popEnterTransition = Screens.Settings.popEnterTransition,
+            popExitTransition = Screens.Settings.popExitTransition
+            ) {
             SettingsScreen()
         }
 
         composable(
             route = Screens.ShowAlarmScreen.route + "?taskId={taskId}&title={title}&desc={desc}",
+            enterTransition = Screens.ShowAlarmScreen.enterTransition,
+            exitTransition = Screens.ShowAlarmScreen.exitTransition,
+            popEnterTransition = Screens.ShowAlarmScreen.popEnterTransition,
+            popExitTransition = Screens.ShowAlarmScreen.popExitTransition,
             arguments = listOf(
                 navArgument("taskId") {
                     type = NavType.LongType
@@ -90,6 +111,14 @@ fun SetupNavGraph(navController: NavHostController) {
                     activity?.finish()
                 }
             )
+        }
+        composable(route = Screens.Calender.route,
+            enterTransition = Screens.Calender.enterTransition,
+            exitTransition = Screens.Calender.exitTransition,
+            popEnterTransition = Screens.Calender.popEnterTransition,
+            popExitTransition = Screens.Calender.popExitTransition
+        ) {
+            CalendarScreen()
         }
 
 
