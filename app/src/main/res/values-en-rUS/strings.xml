@@ -99,12 +99,11 @@
     <string name="fifteen_minutes_until_activity">15 Minutes left until</string>
     <string name="One_minutes_until_activity">1 Minute left until</string>
     <string name="at_time_of_activity">It is time for</string>
-
-    <!-- Deprecated / Alternate Time Strings (Kept to prevent breaking code, but fixed grammar) -->
     <string name="One_day_until_activity">1 Day left until the activity starts</string>
     <string name="One_hour_until_activity">1 Hour left until the activity starts</string>
     <string name="Half_hour_until_activity">30 Minutes left until the activity starts</string>
     <string name="Fifteen_minutes_until_activity">15 Minutes left until the activity starts</string>
     <string name="At_time_of_activity">It is time for the activity</string>
     <string name="calendar">Calendar</string>
+    <string name="error_get_data">Error getting data</string>
 </resources>

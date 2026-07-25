@@ -61,7 +61,7 @@ class ReminderViewModel @Inject constructor(
         viewModelScope.launch {
             _reminders.value = StateResult.Loading
             val result = reminderUseCases.insertReminder(
-                title, description, dateTime, hourTime,
+                title, description, dateTime?.trim(), hourTime?.trim(),
                 repeatType, repeatIntervalDays, repeatIntervalWeeks,
                 repeatIntervalMonths, repeatIntervalYears,reminderMinutesBefore
             )

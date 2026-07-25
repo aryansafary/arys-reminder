@@ -9,8 +9,8 @@ fun ReminderEntity.toDomain(): ReminderModel  {
         id = id,
         title = title,
         description = description,
-        dateTime = dateTime,
-        hourTime = hourTime,
+        dateTime = dateTime?.trim(),
+        hourTime = hourTime?.trim(),
         repeatType = repeatType,
         repeatIntervalDays = repeatIntervalDays,
         repeatIntervalWeeks = repeatIntervalWeeks,
@@ -18,8 +18,8 @@ fun ReminderEntity.toDomain(): ReminderModel  {
         repeatIntervalYears = repeatIntervalYears,
         isActive = isActive,
         reminderMinutesBefore = reminderMinutesBefore,
-        createdAt = createdAt,
-        updatedAt = updatedAt
+        createdAt = createdAt.trim(),
+        updatedAt = updatedAt.trim()
     )
 }
 
@@ -28,8 +28,8 @@ fun ReminderModel.toEntity(): ReminderEntity {
         id = id,
         title = title,
         description = description,
-        dateTime = dateTime,
-        hourTime = hourTime,
+        dateTime = dateTime?.trim(),
+        hourTime = hourTime?.trim(),
         repeatType = repeatType,
         repeatIntervalDays = repeatIntervalDays,
         repeatIntervalWeeks = repeatIntervalWeeks,
@@ -37,7 +37,7 @@ fun ReminderModel.toEntity(): ReminderEntity {
         repeatIntervalYears = repeatIntervalYears,
         isActive = isActive,
         reminderMinutesBefore = reminderMinutesBefore,
-        createdAt = createdAt,
-        updatedAt = updatedAt
+        createdAt = createdAt.trim(),
+        updatedAt = updatedAt.trim()
     )
 }

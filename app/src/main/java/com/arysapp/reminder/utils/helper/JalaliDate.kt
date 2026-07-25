@@ -1,5 +1,4 @@
 package com.arysapp.reminder.utils.helper
-
 import java.util.Calendar
 
 data class JalaliDate(
@@ -15,10 +14,10 @@ data class JalaliDate(
             "دی", "بهمن", "اسفند"
         )
 
-        internal val dayNames = arrayOf(
-            "شنبه", "یکشنبه", "دوشنبه",
-            "سه‌شنبه", "چهارشنبه", "پنجشنبه", "جمعه"
-        )
+//        internal val dayNames = arrayOf(
+//            "شنبه", "یکشنبه", "دوشنبه",
+//            "سه‌شنبه", "چهارشنبه", "پنجشنبه", "جمعه"
+//        )
 
         fun today(): JalaliDate {
             val calendar = Calendar.getInstance()
@@ -28,9 +27,18 @@ data class JalaliDate(
                 calendar.get(Calendar.DAY_OF_MONTH)
             )
         }
+        fun getTodayDateString(isPersian: Boolean): String {
+            return if (isPersian) {
+                val jDate = today()
+                "${jDate.year}-${jDate.month.toString().padStart(2, '0')}-${jDate.day.toString().padStart(2, '0')}"
+            } else {
+                val cal = Calendar.getInstance()
+                "${cal.get(Calendar.YEAR)}-${(cal.get(Calendar.MONTH) + 1).toString().padStart(2, '0')}-${cal.get(Calendar.DAY_OF_MONTH).toString().padStart(2, '0')}"
+            }
+        }
 
         fun fromGregorian(gy: Int, gm: Int, gd: Int): JalaliDate {
-            val g_d_m = intArrayOf(0, 31, if (isLeapGregorian(gy)) 29 else 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
+            val gDM = intArrayOf(0, 31, if (isLeapGregorian(gy)) 29 else 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
             val gy = gy
             val gm = gm
             val gd = gd
@@ -43,31 +51,31 @@ data class JalaliDate(
             val gm2 = gm - 1
             val gd2 = gd - 1
 
-            var g_day_no = 365 * gy2 + (gy2 + 3) / 4 - (gy2 + 99) / 100 + (gy2 + 399) / 400
-            for (i in 0 until gm2) g_day_no += g_d_m[i + 1]
-            g_day_no += gd2
+            var gDayNo = 365 * gy2 + (gy2 + 3) / 4 - (gy2 + 99) / 100 + (gy2 + 399) / 400
+            for (i in 0 until gm2) gDayNo += gDM[i + 1]
+            gDayNo += gd2
 
-            var j_day_no = g_day_no - 79
-            val j_np = j_day_no / 12053
-            j_day_no %= 12053
+            var jDayNo = gDayNo - 79
+            val jNp = jDayNo / 12053
+            jDayNo %= 12053
 
-            jy = 979 + 33 * j_np + 4 * (j_day_no / 1461)
-            j_day_no %= 1461
+            jy = 979 + 33 * jNp + 4 * (jDayNo / 1461)
+            jDayNo %= 1461
 
-            if (j_day_no >= 366) {
-                jy += (j_day_no - 1) / 365
-                j_day_no = (j_day_no - 1) % 365
+            if (jDayNo >= 366) {
+                jy += (jDayNo - 1) / 365
+                jDayNo = (jDayNo - 1) % 365
             }
 
-            val j_days_in_month = intArrayOf(31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 29)
+            val jDaysInMonth = intArrayOf(31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 29)
             var i = 0
-            while (i < 12 && j_day_no >= j_days_in_month[i]) {
-                j_day_no -= j_days_in_month[i]
+            while (i < 12 && jDayNo >= jDaysInMonth[i]) {
+                jDayNo -= jDaysInMonth[i]
                 i++
             }
 
             jm = i + 1
-            jd = j_day_no + 1
+            jd = jDayNo + 1
 
             return JalaliDate(jy, jm, jd)
         }
@@ -86,20 +94,20 @@ data class JalaliDate(
         }
     }
 
-    fun addDay(days: Int) {
-        val calendar = Calendar.getInstance()
-        val gDate = toGregorian()
-        calendar.set(gDate[0], gDate[1] - 1, gDate[2])
-        calendar.add(Calendar.DAY_OF_MONTH, days)
-        val newDate = fromGregorian(
-            calendar.get(Calendar.YEAR),
-            calendar.get(Calendar.MONTH) + 1,
-            calendar.get(Calendar.DAY_OF_MONTH)
-        )
-        this.year = newDate.year
-        this.month = newDate.month
-        this.day = newDate.day
-    }
+//    fun addDay(days: Int) {
+//        val calendar = Calendar.getInstance()
+//        val gDate = toGregorian()
+//        calendar.set(gDate[0], gDate[1] - 1, gDate[2])
+//        calendar.add(Calendar.DAY_OF_MONTH, days)
+//        val newDate = fromGregorian(
+//            calendar.get(Calendar.YEAR),
+//            calendar.get(Calendar.MONTH) + 1,
+//            calendar.get(Calendar.DAY_OF_MONTH)
+//        )
+//        this.year = newDate.year
+//        this.month = newDate.month
+//        this.day = newDate.day
+//    }
 
     fun getDayOfWeek(): Int {
         val calendar = Calendar.getInstance()
@@ -119,50 +127,48 @@ data class JalaliDate(
     }
 
 
-    fun getDayName(): String = dayNames[getDayOfWeek()]
-    fun getMonthName(): String = monthNames[month - 1]
 
     fun toGregorian(): IntArray {
-        val j_days_in_month = intArrayOf(31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 29)
+        val jDaysInMonth = intArrayOf(31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 29)
         val jy = year - 979
         val jm = month - 1
         val jd = day - 1
 
-        var j_day_no = 365 * jy + jy / 33 * 8 + (jy % 33 + 3) / 4
-        for (i in 0 until jm) j_day_no += j_days_in_month[i]
-        j_day_no += jd
+        var jDayNo = 365 * jy + jy / 33 * 8 + (jy % 33 + 3) / 4
+        for (i in 0 until jm) jDayNo += jDaysInMonth[i]
+        jDayNo += jd
 
-        var g_day_no = j_day_no + 79
+        var gDayNo = jDayNo + 79
 
-        var gy = 1600 + 400 * (g_day_no / 146097)
-        g_day_no %= 146097
+        var gy = 1600 + 400 * (gDayNo / 146097)
+        gDayNo %= 146097
 
         var leap = true
-        if (g_day_no >= 36525) {
-            g_day_no--
-            gy += 100 * (g_day_no / 36524)
-            g_day_no %= 36524
+        if (gDayNo >= 36525) {
+            gDayNo--
+            gy += 100 * (gDayNo / 36524)
+            gDayNo %= 36524
 
-            if (g_day_no >= 365) g_day_no++ else leap = false
+            if (gDayNo >= 365) gDayNo++ else leap = false
         }
 
-        gy += 4 * (g_day_no / 1461)
-        g_day_no %= 1461
+        gy += 4 * (gDayNo / 1461)
+        gDayNo %= 1461
 
-        if (g_day_no >= 366) {
+        if (gDayNo >= 366) {
             leap = false
-            g_day_no--
-            gy += g_day_no / 365
-            g_day_no %= 365
+            gDayNo--
+            gy += gDayNo / 365
+            gDayNo %= 365
         }
 
-        val g_days_in_month = intArrayOf(31, if (leap) 29 else 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
+        val gDaysInMonth = intArrayOf(31, if (leap) 29 else 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
         var gm = 0
-        while (g_day_no >= g_days_in_month[gm]) {
-            g_day_no -= g_days_in_month[gm]
+        while (gDayNo >= gDaysInMonth[gm]) {
+            gDayNo -= gDaysInMonth[gm]
             gm++
         }
-        val gd = g_day_no + 1
+        val gd = gDayNo + 1
 
         return intArrayOf(gy, gm + 1, gd)
     }
@@ -197,8 +203,6 @@ data class JalaliDate(
         }
     }
 
-     fun greaterThan(other: JalaliDate): Boolean = this > other
-     fun lessThan(other: JalaliDate): Boolean = this < other
 
 
 

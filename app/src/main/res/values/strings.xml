@@ -98,8 +98,6 @@
     <string name="half_hour_until_activity">نیم ساعت مانده به</string>
     <string name="fifteen_minutes_until_activity">پانزده دقیقه مانده به</string>
     <string name="at_time_of_activity">زمان انجام فرا رسیده:</string>
-
-    <!-- Deprecated / Alternate Time Strings (برای حفظ سازگاری با کدهای قبلی شما) -->
     <string name="One_day_until_activity">یک روز تا شروع یادآوری</string>
     <string name="One_hour_until_activity">یک ساعت تا شروع یادآوری</string>
     <string name="Half_hour_until_activity">نیم ساعت تا شروع یادآوری</string>
@@ -107,5 +105,5 @@
     <string name="One_minutes_until_activity">یک دقیقه تا شروع یادآوری</string>
     <string name="At_time_of_activity">زمان یادآوری</string>
     <string name="calendar">تقویم</string>
-
+    <string name="error_get_data">خطا در دریافت اطلاعات</string>
 </resources>
