@@ -79,7 +79,10 @@ class MainActivity : ComponentActivity() {
                                 MyBottomBar(
                                     navController = navController,
                                     onItemClicked = {
-                                        navController.navigate(it.route)
+                                        if(it.route != navController.currentBackStackEntry!!.destination.route) {
+                                            navController.popBackStack()
+                                            navController.navigate(it.route)
+                                        }
                                     },
                                     onFabClick = {
                                         navController.navigate(Screens.AddReminder.route)

@@ -34,16 +34,3 @@ val    onErrorLight = Color.White
  val   onErrorDark = Color.Black
 
 
-
-
-
-object BottomBarColors {
-    val LightContainer = Color(0xFF1565C0)
-    val DarkContainer = Color(0xFF0D47A1)
-
-    val Selected = Color(0xFFFFC107)
-    val Unselected = Color(0xFFB0BEC5)
-
-    val LightIndicator = Color(0x331565C0)
-    val DarkIndicator = Color(0x330D47A1)
-}

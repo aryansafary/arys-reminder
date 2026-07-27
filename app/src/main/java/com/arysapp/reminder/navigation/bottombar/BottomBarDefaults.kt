@@ -8,7 +8,7 @@ object BottomBarDefaults {
     val Height: Dp = 72.dp
     //val CornerRadius: Dp = 36.dp
     val HorizontalMargin: Dp = 8.dp
-    val BottomMargin: Dp = 18.dp
+    val BottomMargin: Dp = 8.dp
 
     val FabSize: Dp = 64.dp
     val FabIconSize: Dp = 28.dp
