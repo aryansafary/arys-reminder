@@ -1,18 +1,18 @@
 package com.arysapp.reminder.core.alarm
-
-import android.Manifest
+import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresPermission
 import com.arysapp.reminder.R
 import com.arysapp.reminder.core.notification.ReminderNotificationManager
 import com.arysapp.reminder.utils.Constants.USER_LANGUAGE
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 
+@AndroidEntryPoint
 class ReminderAlarmReceiver : BroadcastReceiver() {
 
     companion object {
@@ -20,7 +20,7 @@ class ReminderAlarmReceiver : BroadcastReceiver() {
     }
 
     private fun getLocalizedContext(context: Context): Context {
-        val lang = USER_LANGUAGE ?: "fa"
+        val lang = USER_LANGUAGE
         val locale = Locale(lang)
         Locale.setDefault(locale)
 
@@ -30,7 +30,7 @@ class ReminderAlarmReceiver : BroadcastReceiver() {
         return context.createConfigurationContext(config)
     }
 
-    @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
+    @SuppressLint("MissingPermission")
     override fun onReceive(context: Context, intent: Intent) {
         try {
             val isReminderOnly = intent.getBooleanExtra(AlarmIntentFactory.EXTRA_IS_REMINDER_ONLY, true)
@@ -44,7 +44,6 @@ class ReminderAlarmReceiver : BroadcastReceiver() {
 
             if (isReminderOnly) {
                 val reminderIndex = intent.getIntExtra("reminder_index", -1)
-
                 val localizedContext = getLocalizedContext(context)
 
                 val message = when (reminderIndex) {
@@ -63,7 +62,6 @@ class ReminderAlarmReceiver : BroadcastReceiver() {
                 }
 
                 val title = localizedContext.getString(R.string.Reminder)
-                //+ " $reminderTitle"
 
                 ReminderNotificationManager.showReminderNotification(
                     context,

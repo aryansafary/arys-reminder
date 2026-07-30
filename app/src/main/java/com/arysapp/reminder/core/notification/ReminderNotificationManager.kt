@@ -1,7 +1,7 @@
 package com.arysapp.reminder.core.notification
+
 import android.Manifest
 import android.annotation.SuppressLint
-import com.arysapp.reminder.R
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -15,6 +15,7 @@ import androidx.annotation.RequiresPermission
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.arysapp.reminder.MainActivity
+import com.arysapp.reminder.R
 import com.arysapp.reminder.core.alarm.AlarmIntentFactory
 import com.arysapp.reminder.core.alarm.AlarmRingtoneService
 
@@ -24,6 +25,7 @@ object ReminderNotificationManager {
     const val CHANNEL_ID_ALARM = "task_alarm_channel"
 
     private const val REMINDER_ID_OFFSET = 10_000
+    private const val ALARM_PENDING_INTENT_OFFSET = 20_000
     const val ACTION_STOP_ALARM = "com.arysapp.reminder.action.STOP_ALARM"
 
     fun ensureChannelsExist(context: Context) {
@@ -34,7 +36,7 @@ object ReminderNotificationManager {
     private fun ensureReminderChannelExists(context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val nm = context.getSystemService(NotificationManager::class.java)
-            if (nm.getNotificationChannel(CHANNEL_ID_REMINDER) == null) {
+            if (nm?.getNotificationChannel(CHANNEL_ID_REMINDER) == null) {
                 val channel = NotificationChannel(
                     CHANNEL_ID_REMINDER,
                     context.getString(R.string.Task_Reminder),
@@ -42,7 +44,7 @@ object ReminderNotificationManager {
                 ).apply {
                     description = context.getString(R.string.Task_Reminder)
                 }
-                nm.createNotificationChannel(channel)
+                nm?.createNotificationChannel(channel)
             }
         }
     }
@@ -50,7 +52,7 @@ object ReminderNotificationManager {
     private fun ensureAlarmChannelExists(context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val nm = context.getSystemService(NotificationManager::class.java)
-            if (nm.getNotificationChannel(CHANNEL_ID_ALARM) == null) {
+            if (nm?.getNotificationChannel(CHANNEL_ID_ALARM) == null) {
                 val channel = NotificationChannel(
                     CHANNEL_ID_ALARM,
                     context.getString(R.string.reminder_alarm),
@@ -60,7 +62,7 @@ object ReminderNotificationManager {
                     setSound(null, null)
                     enableVibration(true)
                 }
-                nm.createNotificationChannel(channel)
+                nm?.createNotificationChannel(channel)
             }
         }
     }
@@ -91,7 +93,7 @@ object ReminderNotificationManager {
             .setContentIntent(pending)
             .build()
 
-        NotificationManagerCompat.from(context).notify((reminderId.toInt()) + REMINDER_ID_OFFSET, notif)
+        NotificationManagerCompat.from(context).notify(reminderId.toInt() + REMINDER_ID_OFFSET, notif)
     }
 
     fun createStopPendingIntent(
@@ -110,10 +112,11 @@ object ReminderNotificationManager {
             setPackage(context.packageName)
         }
 
-        val req = if (reminderId != -1L) reminderId.toInt() else 0
+
+        val requestCode = if (reminderId != -1L) reminderId.toInt() + ALARM_PENDING_INTENT_OFFSET else 0
         return PendingIntent.getService(
             context,
-            req,
+            requestCode,
             stopIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
@@ -154,10 +157,12 @@ object ReminderNotificationManager {
             .setCategory(NotificationCompat.CATEGORY_ALARM)
             .setFullScreenIntent(fullScreenPendingIntent, true)
             .setAutoCancel(false)
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .addAction(R.drawable.stop, context.getString(R.string.stop), stopPendingIntent)
             .build()
     }
 
     fun getDefaultAlarmSound(): Uri =
-        RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM) ?: RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+        RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
+            ?: RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
 }

@@ -1,8 +1,9 @@
 package com.arysapp.reminder.core.alarm
 
-import com.arysapp.reminder.domain.usecase.ReminderUseCases
 import android.util.Log
 import com.arysapp.reminder.domain.model.ReminderModel
+import com.arysapp.reminder.domain.model.RepeatType
+import com.arysapp.reminder.domain.usecase.ReminderUseCases
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -17,40 +18,41 @@ class ReminderRepeatHandler @Inject constructor(
         private const val TAG = "ReminderRepeatHandler"
     }
 
-    private val dateFormatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    private val dateFormatter = SimpleDateFormat("yyyy-MM-dd", Locale.US)
 
     suspend fun handleRepeat(reminderId: Long, repeatType: String?, dateStr: String?, hourTime: String?) {
         try {
-            when (repeatType?.uppercase(Locale.getDefault()) ?: "NONE") {
-                "NONE" -> {
-                    val reminderToDelete = ReminderModel(
-                        id = reminderId,
-                        title = "",
-                        description = "",
-                        dateTime = dateStr,
-                        hourTime = hourTime,
-                        repeatType = "NONE",
-                        isActive = true,
-                        createdAt = "",
-                        updatedAt = "",
+            val normalizedRepeatType = repeatType?.uppercase(Locale.US) ?: RepeatType.NONE.name
+
+            when (normalizedRepeatType) {
+                RepeatType.NONE.name -> {
+                    reminderUseCases.deleteReminder(
+                        ReminderModel(
+                            id = reminderId,
+                            title = "",
+                            description = "",
+                            dateTime = dateStr,
+                            hourTime = hourTime,
+                            repeatType = RepeatType.NONE.name,
+                            isActive = false,
+                            createdAt = "",
+                            updatedAt = ""
+                        )
                     )
-                    reminderUseCases.updateReminderStatus(id = reminderId, isActive = false)
-                    reminderUseCases.processExpiredReminders()
-                    reminderUseCases.deleteReminder(reminderToDelete)
                 }
-                "DAILY" -> {
+                RepeatType.DAILY.name -> {
                     val newDate = incrementDate(dateStr, 1)
                     reminderUseCases.updateReminderDateTime(reminderId, newDate, hourTime)
                 }
-                "WEEKLY" -> {
+                RepeatType.WEEKLY.name -> {
                     val newDate = incrementDate(dateStr, 7)
                     reminderUseCases.updateReminderDateTime(reminderId, newDate, hourTime)
                 }
-                "MONTHLY" -> {
+                RepeatType.MONTHLY.name -> {
                     val newDate = incrementMonth(dateStr)
                     reminderUseCases.updateReminderDateTime(reminderId, newDate, hourTime)
                 }
-                "YEARLY" -> {
+                RepeatType.YEARLY.name -> {
                     val newDate = incrementYear(dateStr)
                     reminderUseCases.updateReminderDateTime(reminderId, newDate, hourTime)
                 }
@@ -59,11 +61,10 @@ class ReminderRepeatHandler @Inject constructor(
                 }
             }
 
-
             reminderScheduler.cancelReminderForReminder(reminderId)
             reminderScheduler.scheduleAllReminders()
 
-            Log.d(TAG, "handleRepeat completed for reminderId=$reminderId repeatType=$repeatType")
+            Log.d(TAG, "handleRepeat completed for reminderId=$reminderId repeatType=$normalizedRepeatType")
         } catch (e: Exception) {
             Log.e(TAG, "handleRepeat error for reminderId=$reminderId", e)
         }
@@ -72,13 +73,13 @@ class ReminderRepeatHandler @Inject constructor(
     private fun incrementDate(dateStr: String?, days: Int): String {
         if (dateStr.isNullOrBlank()) return dateStr ?: ""
         return try {
-            val cal = Calendar.getInstance().apply {
+            val cal = Calendar.getInstance(Locale.US).apply {
                 time = dateFormatter.parse(dateStr) ?: return dateStr
                 add(Calendar.DAY_OF_MONTH, days)
             }
             dateFormatter.format(cal.time)
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e(TAG, "Error incrementing date: $dateStr", e)
             dateStr
         }
     }
@@ -86,13 +87,13 @@ class ReminderRepeatHandler @Inject constructor(
     private fun incrementMonth(dateStr: String?): String {
         if (dateStr.isNullOrBlank()) return dateStr ?: ""
         return try {
-            val cal = Calendar.getInstance().apply {
+            val cal = Calendar.getInstance(Locale.US).apply {
                 time = dateFormatter.parse(dateStr) ?: return dateStr
                 add(Calendar.MONTH, 1)
             }
             dateFormatter.format(cal.time)
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e(TAG, "Error incrementing month: $dateStr", e)
             dateStr
         }
     }
@@ -100,13 +101,13 @@ class ReminderRepeatHandler @Inject constructor(
     private fun incrementYear(dateStr: String?): String {
         if (dateStr.isNullOrBlank()) return dateStr ?: ""
         return try {
-            val cal = Calendar.getInstance().apply {
+            val cal = Calendar.getInstance(Locale.US).apply {
                 time = dateFormatter.parse(dateStr) ?: return dateStr
-                add(Calendar.YEAR, 1) // اضافه کردن دقیقا ۱ سال
+                add(Calendar.YEAR, 1)
             }
             dateFormatter.format(cal.time)
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e(TAG, "Error incrementing year: $dateStr", e)
             dateStr
         }
     }

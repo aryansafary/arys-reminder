@@ -1,5 +1,4 @@
 package com.arysapp.reminder.core.alarm
-import com.arysapp.reminder.core.notification.ReminderNotificationManager
 import android.app.Notification
 import android.app.Service
 import android.content.Intent
@@ -9,9 +8,12 @@ import android.media.MediaPlayer
 import android.os.Build
 import android.os.IBinder
 import android.util.Log
+import com.arysapp.reminder.core.notification.ReminderNotificationManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,6 +25,7 @@ class AlarmRingtoneService : Service() {
     }
 
     private var mediaPlayer: MediaPlayer? = null
+    private val serviceScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
     @Inject
     lateinit var reminderRepeatHandler: ReminderRepeatHandler
@@ -50,7 +53,8 @@ class AlarmRingtoneService : Service() {
                 stopAlarmSound()
                 @Suppress("DEPRECATION")
                 stopForeground(true)
-                CoroutineScope(Dispatchers.IO).launch {
+
+                serviceScope.launch {
                     try {
                         reminderRepeatHandler.handleRepeat(reminderId, repeatType, dateTime, hourTime)
                     } catch (e: Exception) {
@@ -66,11 +70,9 @@ class AlarmRingtoneService : Service() {
             currentDateTime = intent?.getStringExtra(AlarmIntentFactory.EXTRA_DATE_TIME)
             currentHourTime = intent?.getStringExtra(AlarmIntentFactory.EXTRA_HOUR_TIME)
 
-
             val title = intent?.getStringExtra(AlarmIntentFactory.EXTRA_REMINDER_TITLE) ?: "Reminder"
             val description = intent?.getStringExtra(AlarmIntentFactory.EXTRA_REMINDER_DESCRIPTION) ?: "زمان انجام فعالیت فرا رسیده است."
 
-            // PendingIntent برای stop action
             val stopPending = ReminderNotificationManager.createStopPendingIntent(
                 this,
                 currentReminderId,
@@ -144,6 +146,7 @@ class AlarmRingtoneService : Service() {
     override fun onDestroy() {
         super.onDestroy()
         stopAlarmSound()
+        serviceScope.cancel()
     }
 
     override fun onBind(intent: Intent?): IBinder? = null

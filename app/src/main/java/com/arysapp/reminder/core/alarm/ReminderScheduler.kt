@@ -1,10 +1,10 @@
 package com.arysapp.reminder.core.alarm
-
 import com.arysapp.reminder.domain.model.ReminderModel
 import com.arysapp.reminder.domain.usecase.ReminderUseCases
 import android.app.AlarmManager
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.util.Log
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.first
@@ -23,7 +23,6 @@ class ReminderScheduler @Inject constructor(
     private val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     private val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
 
-    // مقادیر دقیق میلی‌ثانیه برای زمان‌های جدید (استفاده از L الزامی است تا Overflow نشود)
     private val reminderOffsets = listOf(
         30L * 24 * 60 * 60 * 1000L, // 1 month before (~30 days)
         15L * 24 * 60 * 60 * 1000L, // 15 days before
@@ -62,19 +61,46 @@ class ReminderScheduler @Inject constructor(
 
         val now = System.currentTimeMillis()
 
+
+        val canScheduleExact = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            alarmManager.canScheduleExactAlarms()
+        } else {
+            true
+        }
+
         reminderOffsets.forEachIndexed { index, offset ->
             val reminderTime = dueTime - offset
             if (reminderTime > now) {
                 val pending = AlarmIntentFactory.createReminderPendingIntent(context, reminder, index)
-                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, reminderTime, pending)
+                setAlarmSafely(reminderTime, pending, canScheduleExact)
                 Log.d(TAG, "Scheduled reminder index=$index for reminder=${reminder.id} at=$reminderTime")
             }
         }
 
         if (dueTime > now) {
             val duePending = AlarmIntentFactory.createDuePendingIntent(context, reminder)
-            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, dueTime, duePending)
+            setAlarmSafely(dueTime, duePending, canScheduleExact)
             Log.d(TAG, "Scheduled due alarm for reminder=${reminder.id} at=$dueTime")
+        }
+    }
+
+    private fun setAlarmSafely(triggerTime: Long, pendingIntent: android.app.PendingIntent, canScheduleExact: Boolean) {
+        try {
+            if (canScheduleExact) {
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent)
+            } else {
+
+                alarmManager.set(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent)
+            }
+        } catch (e: SecurityException) {
+            Log.e(TAG, "SecurityException caught while scheduling exact alarm. Falling back to standard set.", e)
+            try {
+                alarmManager.set(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent)
+            } catch (fallbackEx: Exception) {
+                Log.e(TAG, "Fallback alarm scheduling failed", fallbackEx)
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Unexpected error while setting alarm", e)
         }
     }
 

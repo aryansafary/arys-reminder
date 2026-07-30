@@ -1,6 +1,7 @@
 [versions]
 
 agp = "9.2.1"
+core = "1.7.0"
 kotlin = "2.2.21"
 coreKtx = "1.17.0"
 junit = "4.13.2"
@@ -14,6 +15,7 @@ composeBom = "2025.08.00"
 ksp_version = "2.3.2"
 datastorePreferences = "1.1.7"
 lottieCompose = "6.6.7"
+robolectric = "4.16.1"
 room_version = "2.7.2"
 hiltAndroid = "2.57"
 hiltNavigationCompose = "1.2.0"
@@ -29,6 +31,7 @@ gson = "2.13.2"
 hiltNavigationFragment = "1.0.0"
 
 [libraries]
+androidx-core = { module = "androidx.test:core", version.ref = "core" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-hilt-navigation-fragment = { module = "androidx.hilt:hilt-navigation-fragment", version.ref = "hiltNavigationFragment" }
 androidx-hilt-work = { module = "androidx.hilt:hilt-work", version.ref = "hiltNavigationFragment" }
@@ -46,7 +49,7 @@ androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
-androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+#androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 #____________________________________________________________________________________________
 #DataStore
@@ -73,6 +76,7 @@ gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockitoCore" }
 mockito-inline = { module = "org.mockito:mockito-inline", version.ref = "mockitoInline" }
 mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockitoKotlin" }
+robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 truth = { module = "com.google.truth:truth", version.ref = "truth" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
 

@@ -1,9 +1,8 @@
 package com.arysapp.reminder.core.alarm
-import com.arysapp.reminder.domain.model.ReminderModel
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-
+import com.arysapp.reminder.domain.model.ReminderModel
 object AlarmIntentFactory {
 
     const val EXTRA_REMINDER_ID = "reminder_id"
@@ -25,11 +24,12 @@ object AlarmIntentFactory {
             putExtra(EXTRA_IS_REMINDER_ONLY, true)
             putExtra(EXTRA_REMINDER_INDEX, reminderIndex)
             putExtra(EXTRA_REPEAT_TYPE, reminder.repeatType)
-            putExtra(EXTRA_DATE_TIME, reminder.dateTime)
-            putExtra(EXTRA_HOUR_TIME, reminder.hourTime)
+            putExtra(EXTRA_DATE_TIME, reminder.dateTime ?: "")
+            putExtra(EXTRA_HOUR_TIME, reminder.hourTime ?: "")
         }
 
-        val requestCode = reminder.id.toInt() * REMINDER_REQUEST_CODE_MULTIPLIER + reminderIndex
+        val requestCode = (reminder.id % Int.MAX_VALUE).toInt() * REMINDER_REQUEST_CODE_MULTIPLIER + reminderIndex
+
         return PendingIntent.getBroadcast(
             context,
             requestCode,
@@ -46,11 +46,12 @@ object AlarmIntentFactory {
             putExtra(EXTRA_REMINDER_DESCRIPTION, reminder.description ?: "")
             putExtra(EXTRA_IS_REMINDER_ONLY, false)
             putExtra(EXTRA_REPEAT_TYPE, reminder.repeatType)
-            putExtra(EXTRA_DATE_TIME, reminder.dateTime)
-            putExtra(EXTRA_HOUR_TIME, reminder.hourTime)
+            putExtra(EXTRA_DATE_TIME, reminder.dateTime ?: "")
+            putExtra(EXTRA_HOUR_TIME, reminder.hourTime ?: "")
         }
 
-        val requestCode = reminder.id.toInt()
+        val requestCode = (reminder.id % Int.MAX_VALUE).toInt()
+
         return PendingIntent.getBroadcast(
             context,
             requestCode,

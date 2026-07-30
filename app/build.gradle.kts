@@ -24,6 +24,8 @@ android {
             unitTests.all {
                 it.jvmArgs("-XX:+EnableDynamicAgentLoading")
             }
+            unitTests.isIncludeAndroidResources = true
+            unitTests.isReturnDefaultValues = true
         }
     }
 
@@ -69,10 +71,10 @@ dependencies {
     testImplementation(libs.mockito.kotlin)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.androidx.ui.tooling)
+    //androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.test.manifest)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.androidx.core)
     //###########################################################################
     //DataStore
     implementation(libs.androidx.datastore.preferences)
