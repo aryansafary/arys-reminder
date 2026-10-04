@@ -90,18 +90,7 @@ fun MyTopAppBar(
                     }
                 }
             },
-            actions = {
-                if (currentRoute != Screens.Home.route && currentRoute != Screens.Calender.route && currentRoute != Screens.Settings.route) {
-                    IconButton(onClick = onSettingsClick) {
-                        Icon(
-                            painter = painterResource(R.drawable.settings_filled),
-                            contentDescription = "Settings",
-                            modifier = Modifier.size(22.dp),
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-                }
-            }
+
         )
     }
 }

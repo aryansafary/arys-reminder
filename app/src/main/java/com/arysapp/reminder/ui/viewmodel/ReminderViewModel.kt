@@ -56,14 +56,16 @@ class ReminderViewModel @Inject constructor(
         repeatIntervalWeeks: Int? = null,
         repeatIntervalMonths: Int? = null,
         repeatIntervalYears: Int? = null,
-        reminderMinutesBefore: Int? = null
+        reminderMinutesBefore: Int? = null,
+        category: String
     ) {
         viewModelScope.launch {
             _reminders.value = StateResult.Loading
             val result = reminderUseCases.insertReminder(
                 title, description, dateTime?.trim(), hourTime?.trim(),
                 repeatType, repeatIntervalDays, repeatIntervalWeeks,
-                repeatIntervalMonths, repeatIntervalYears,reminderMinutesBefore
+                repeatIntervalMonths, repeatIntervalYears,reminderMinutesBefore,
+                category
             )
             if (result.isSuccess) {
                 refreshRemindersWithProcessing()
@@ -108,10 +110,23 @@ class ReminderViewModel @Inject constructor(
 
     fun updateReminderStatus(reminderId: Long, isActive: Boolean) {
         viewModelScope.launch {
-            _reminders.value = StateResult.Loading
+            val currentState = _reminders.value
+            if (currentState is StateResult.Success) {
+                val updatedList = currentState.data.map { reminder ->
+                    if (reminder.id == reminderId) {
+                        reminder.copy(isActive = isActive)
+                    } else {
+                        reminder
+                    }
+                }
+                _reminders.value = StateResult.Success(updatedList)
+            }
+
             val result = reminderUseCases.updateReminderStatus(reminderId, isActive)
             if (result.isSuccess) {
-                refreshRemindersWithProcessing()
+
+                val currentList = (_reminders.value as? StateResult.Success)?.data ?: emptyList()
+                reminderScheduler.scheduleRemindersForReminders(currentList)
             } else if (result.isFailure) {
                 _reminders.value = StateResult.Error(
                     result.exceptionOrNull()?.message ?: "Error updating task status"

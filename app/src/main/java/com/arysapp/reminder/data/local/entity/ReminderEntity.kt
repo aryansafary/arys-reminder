@@ -1,4 +1,5 @@
 package com.arysapp.reminder.data.local.entity
+
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -17,6 +18,7 @@ import com.arysapp.reminder.utils.ConstantsDatabase.COLUMN_REMINDER_DATE_TIME
 import com.arysapp.reminder.utils.ConstantsDatabase.COLUMN_REMINDER_REPEAT_INTERVAL_YEARS
 import com.arysapp.reminder.utils.ConstantsDatabase.COLUMN_REMINDER_TITLE
 import com.arysapp.reminder.utils.ConstantsDatabase.COLUMN_REMINDER_UPDATED_AT
+import com.arysapp.reminder.utils.ConstantsDatabase.COLUMN_REMINDER_CATEGORY
 import com.arysapp.reminder.utils.ConstantsDatabase.REMINDER_TABLE_NAME
 
 @Entity(tableName = REMINDER_TABLE_NAME)
@@ -58,10 +60,13 @@ data class ReminderEntity(
     @ColumnInfo(name = COLUMN_REMINDER_REMINDER_MINUTES_BEFORE)
     val reminderMinutesBefore: Int? = null,
 
+    // فیلد جدید دسته‌بندی با مقدار پیش‌فرض عمومی
+    @ColumnInfo(name = COLUMN_REMINDER_CATEGORY)
+    val category: String = "GENERAL",
+
     @ColumnInfo(name = COLUMN_REMINDER_CREATED_AT)
     val createdAt: String,
 
     @ColumnInfo(name = COLUMN_REMINDER_UPDATED_AT)
     val updatedAt: String
 )
-

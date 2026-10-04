@@ -1,6 +1,5 @@
 package com.arysapp.reminder.ui.theme
 
-
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -12,40 +11,41 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-   primary = primaryDark,
-   onPrimary=onPrimaryDark,
-   primaryContainer=primaryContainerDark,
-   onPrimaryContainer=onPrimaryContainerDark,
-   secondary=secondaryDark,
-    onSecondary=onSecondaryDark,
-    background=backgroundDark,
-    onBackground=onBackgroundDark,
-    surface=surfaceDark,
-    onSurface=onSurfaceDark,
-    error=errorDark,
-    onError=onErrorDark
+    primary = primaryDark,
+    onPrimary = onPrimaryDark,
+    primaryContainer = primaryContainerDark,
+    onPrimaryContainer = onPrimaryContainerDark,
+    secondary = secondaryDark,
+    onSecondary = onSecondaryDark,
+    background = backgroundDark,
+    onBackground = onBackgroundDark,
+    surface = surfaceDark,
+    surfaceVariant = surfaceVariantDark,
+    onSurface = onSurfaceDark,
+    error = errorDark,
+    onError = onErrorDark
 )
 
 private val LightColorScheme = lightColorScheme(
     primary = primaryLight,
-    onPrimary=onPrimaryLight,
-    primaryContainer=primaryContainerLight,
-    onPrimaryContainer=onPrimaryContainerLight,
-    secondary=secondaryLight,
-    onSecondary=onSecondaryLight,
-    background=backgroundLight,
-    onBackground=onBackgroundLight,
-    surface=surfaceLight,
-    onSurface=onSurfaceLight,
-    error=errorLight,
-    onError=onErrorLight
+    onPrimary = onPrimaryLight,
+    primaryContainer = primaryContainerLight,
+    onPrimaryContainer = onPrimaryContainerLight,
+    secondary = secondaryLight,
+    onSecondary = onSecondaryLight,
+    background = backgroundLight,
+    onBackground = onBackgroundLight,
+    surface = surfaceLight,
+    surfaceVariant = surfaceVariantLight,
+    onSurface = onSurfaceLight,
+    error = errorLight,
+    onError = onErrorLight
 )
 
 @Composable
 fun ArysReminderTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
@@ -53,7 +53,6 @@ fun ArysReminderTheme(
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
-
         darkTheme -> DarkColorScheme
         else -> LightColorScheme
     }

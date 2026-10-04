@@ -1,14 +1,6 @@
 package com.arysapp.reminder.ui.screen
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -26,7 +18,6 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
-import com.arysapp.reminder.domain.model.ReminderModel
 import com.arysapp.reminder.ui.components.ReminderCard
 import com.arysapp.reminder.ui.viewmodel.ReminderViewModel
 import com.arysapp.reminder.utils.StateResult
@@ -51,14 +42,14 @@ fun HomeScreen(
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
-            when (remindersState) {
+            when (val currentState = remindersState) {
                 is StateResult.Loading -> {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                         CircularProgressIndicator()
                     }
                 }
                 is StateResult.Success -> {
-                    val reminders = (remindersState as StateResult.Success<List<ReminderModel>>).data
+                    val reminders = currentState.data
                     if (reminders.isEmpty()) {
                         Column(
                             modifier = Modifier
@@ -67,27 +58,31 @@ fun HomeScreen(
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-EmptyStateLottie()
+                            EmptyStateLottie()
                         }
                     } else {
                         LazyColumn(
                             state = listState,
-                            modifier = Modifier
-                                .fillMaxSize(),
+                            modifier = Modifier.fillMaxSize(),
                             verticalArrangement = Arrangement.spacedBy(8.dp),
                             contentPadding = PaddingValues(bottom = 16.dp)
                         ) {
-                            items(items = reminders, key = { it.id }) { reminder ->
+                            items(
+                                items = reminders,
+                                key = { reminder -> reminder.id },
+                                contentType = { _ -> "ReminderCardItem" }
+                            ) { reminder ->
                                 ReminderCard(
                                     reminder = reminder,
-                                    onEdit = { reminder ->
+                                    onEdit = { selectedReminder ->
                                         val gson = Gson()
-                                        val reminderJson = gson.toJson(reminder)
-                                        navController.navigate(Screens.AddReminder.withArgs(reminderJson))
+                                        val reminderJson = gson.toJson(selectedReminder)
+                                        val encodedJson = android.net.Uri.encode(reminderJson)
 
+                                        navController.navigate(Screens.AddReminder.withArgs(encodedJson))
                                     },
-                                    onDelete = { reminder ->
-                                        viewModel.deleteReminder(reminder)
+                                    onDelete = { selectedReminder ->
+                                        viewModel.deleteReminder(selectedReminder)
                                     },
                                     onToggle = { newState ->
                                         viewModel.updateReminderStatus(reminder.id, newState)
@@ -99,7 +94,7 @@ EmptyStateLottie()
                 }
 
                 is StateResult.Error -> {
-                    val message = (remindersState as StateResult.Error).message
+                    val message = currentState.message
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
@@ -136,9 +131,9 @@ fun EmptyStateLottie() {
             iterations = LottieConstants.IterateForever,
             modifier = Modifier.size(250.dp)
         )
-        Text(text = stringResource(R.string.not_found_reminder),
-            style = MaterialTheme.typography.bodyLarge)
+        Text(
+            text = stringResource(R.string.not_found_reminder),
+            style = MaterialTheme.typography.bodyLarge
+        )
     }
 }
-
-

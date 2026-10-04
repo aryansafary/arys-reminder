@@ -106,4 +106,15 @@
     <string name="At_time_of_activity">زمان یادآوری</string>
     <string name="calendar">تقویم</string>
     <string name="error_get_data">خطا در دریافت اطلاعات</string>
+    <string name="category">دسته‌بندی</string>
+    <string name="hour">ساعت</string>
+    <string name="minutes">دقیقه</string>
+        <string name="category_general">عمومی</string>
+        <string name="category_personal">شخصی</string>
+        <string name="category_work">کاری</string>
+        <string name="category_gym_health">ورزش و سلامتی</string>
+        <string name="category_study">مطالعه</string>
+        <string name="category_shopping">خرید</string>
+        <string name="category_meeting">جلسه و ملاقات</string>
+
 </resources>

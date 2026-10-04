@@ -1,7 +1,5 @@
 package com.arysapp.reminder.domain.model
 
-
-
 data class ReminderModel(
     val id: Long = 0,
     val title: String,
@@ -15,6 +13,7 @@ data class ReminderModel(
     val repeatIntervalYears: Int? = null,
     val isActive: Boolean = true,
     val reminderMinutesBefore: Int? = null,
+    val category: String = "GENERAL",
     val createdAt: String,
     val updatedAt: String
 )

@@ -18,7 +18,8 @@ class InsertReminderUseCase @Inject constructor(
         repeatIntervalWeeks: Int? = null,
         repeatIntervalMonths: Int? = null,
         repeatIntervalYears: Int? = null,
-        reminderMinutesBefore: Int? = null
+        reminderMinutesBefore: Int? = null,
+        category: String
     ): Result<Long> {
         return try {
             if (title.isBlank()) {
@@ -47,7 +48,8 @@ class InsertReminderUseCase @Inject constructor(
                 isActive = true,
                 reminderMinutesBefore = reminderMinutesBefore,
                 createdAt = "currentTime",
-                updatedAt = "currentTime"
+                updatedAt = "currentTime",
+                category = category
             )
             val taskId = reminderRepository.insertReminder(task)
             Result.success(taskId)

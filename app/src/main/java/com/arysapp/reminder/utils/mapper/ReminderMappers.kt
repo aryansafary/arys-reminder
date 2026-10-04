@@ -3,8 +3,7 @@ package com.arysapp.reminder.utils.mapper
 import com.arysapp.reminder.data.local.entity.ReminderEntity
 import com.arysapp.reminder.domain.model.ReminderModel
 
-
-fun ReminderEntity.toDomain(): ReminderModel  {
+fun ReminderEntity.toDomain(): ReminderModel {
     return ReminderModel(
         id = id,
         title = title,
@@ -18,6 +17,7 @@ fun ReminderEntity.toDomain(): ReminderModel  {
         repeatIntervalYears = repeatIntervalYears,
         isActive = isActive,
         reminderMinutesBefore = reminderMinutesBefore,
+        category = category.trim().ifEmpty { "GENERAL" },
         createdAt = createdAt.trim(),
         updatedAt = updatedAt.trim()
     )
@@ -37,6 +37,7 @@ fun ReminderModel.toEntity(): ReminderEntity {
         repeatIntervalYears = repeatIntervalYears,
         isActive = isActive,
         reminderMinutesBefore = reminderMinutesBefore,
+        category = category.trim().ifEmpty { "GENERAL" },
         createdAt = createdAt.trim(),
         updatedAt = updatedAt.trim()
     )

@@ -1,5 +1,8 @@
 package com.arysapp.reminder.utils.helper
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 data class JalaliDate(
     var year: Int = 0,
@@ -82,6 +85,17 @@ data class JalaliDate(
 
         private fun isLeapGregorian(year: Int): Boolean {
             return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)
+        }
+
+        fun isDateTimeInFuture(date: String, time: String): Boolean {
+            val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.US)
+            val dateTimeString = "$date $time"
+            return try {
+                val selectedDate = sdf.parse(dateTimeString)
+                selectedDate != null && selectedDate.after(Date())
+            } catch (_: Exception) {
+                false
+            }
         }
     }
 

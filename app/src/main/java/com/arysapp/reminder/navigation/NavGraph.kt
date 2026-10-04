@@ -37,7 +37,8 @@ fun SetupNavGraph(
             HomeScreen(navController = navController)
         }
 
-        composable(route = Screens.AddReminder.route + "?args={task}",
+        composable(
+            route = Screens.AddReminder.route + "?task={task}",
             enterTransition = Screens.AddReminder.enterTransition,
             exitTransition = Screens.AddReminder.exitTransition,
             popEnterTransition = Screens.AddReminder.popEnterTransition,
@@ -49,14 +50,24 @@ fun SetupNavGraph(
                     nullable = true
                 }
             )
-            ) {
+        ) { backStackEntry ->
             val gson = Gson()
-            val taskJson = it.arguments?.getString("task")
-            val reminderModel = if (taskJson.isNullOrEmpty()) null else gson.fromJson(taskJson, ReminderModel::class.java)
+            val taskJson = backStackEntry.arguments?.getString("task")
+
+            val reminderModel = if (taskJson.isNullOrEmpty() || taskJson == "{task}") {
+                null
+            } else {
+                try {
+                    gson.fromJson(taskJson, ReminderModel::class.java)
+                } catch (_: Exception) {
+                    null
+                }
+            }
+
             AddReminderScreen(
-                navController=navController,
+                navController = navController,
                 reminderModel = reminderModel
-                )
+            )
         }
 
         composable(route = Screens.Settings.route,

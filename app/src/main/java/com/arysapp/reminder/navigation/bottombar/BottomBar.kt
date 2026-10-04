@@ -31,7 +31,7 @@ fun MyBottomBar(
     onFabClick: () -> Unit,
     modifier: Modifier = Modifier,
     colors: BottomBarColors = BottomBarColorDefaults.colors(),
-    fabIcon: Painter = painterResource(R.drawable.add_reminder_filled)
+    fabIcon: Painter = painterResource(R.drawable.add_reminder)
 ) {
     val bottomBarShape = remember { BottomBarShape() }
     val items = listOf(

@@ -18,4 +18,5 @@ object ConstantsDatabase {
     const val COLUMN_REMINDER_REMINDER_MINUTES_BEFORE = "reminder_reminder_minutes_before"
     const val COLUMN_REMINDER_CREATED_AT = "reminder_created_at"
     const val COLUMN_REMINDER_UPDATED_AT = "reminder_updated_at"
+    const val COLUMN_REMINDER_CATEGORY = "reminder_category"
 }

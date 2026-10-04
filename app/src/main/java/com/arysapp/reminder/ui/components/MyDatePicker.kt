@@ -1,43 +1,22 @@
 package com.arysapp.reminder.ui.components
 
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.arysapp.reminder.utils.helper.JalaliDate
 import java.util.Calendar
@@ -47,6 +26,7 @@ import com.arysapp.reminder.utils.Constants.PERSIAN_LANGUAGE
 import com.arysapp.reminder.utils.Constants.USER_LANGUAGE
 import java.util.GregorianCalendar
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyDatePicker(
     selectedDate: String,
@@ -56,42 +36,74 @@ fun MyDatePicker(
     var showPicker by remember { mutableStateOf(false) }
 
     Column(
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .fillMaxWidth()
-            .padding(8.dp)
+            //.padding(4.dp)
     ) {
         OutlinedButton(
             onClick = { showPicker = true },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(
-                text = selectedDate.toDigits().ifEmpty { stringResource(R.string.selecting_date) },
-                style = MaterialTheme.typography.bodyLarge
+            modifier = modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(12.dp),
+            colors = ButtonDefaults.outlinedButtonColors(
+                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
             )
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start,
+                modifier = Modifier.fillMaxWidth().padding(top = 8.dp , bottom = 8.dp)
+
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.calendar_icon),
+                    contentDescription = "calendar",
+                    tint = MaterialTheme.colorScheme.onSurface,
+                    modifier= Modifier.size(24.dp)
+                )
+                Text(
+                    text = selectedDate.toDigits()
+                        .ifEmpty { stringResource(R.string.selecting_date) },
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontWeight = FontWeight.Normal,
+                    maxLines = 1,
+                    modifier = Modifier.padding(start = 8.dp)
+                )
+            }
         }
 
         if (showPicker) {
-            if (USER_LANGUAGE == PERSIAN_LANGUAGE) {
-                JalaliDatePicker(
-                    onDismiss = { showPicker = false },
-                    onConfirm = {
-                        onDateSelected(it)
-                        showPicker = false
+            ModalBottomSheet(
+                onDismissRequest = { showPicker = false },
+                sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+                containerColor = MaterialTheme.colorScheme.surface,
+                shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)
+            ) {
+                Box(modifier = Modifier.padding(bottom = 36.dp, start = 20.dp, end = 20.dp)) {
+                    if (USER_LANGUAGE == PERSIAN_LANGUAGE) {
+                        JalaliDatePicker(
+                            onDismiss = { showPicker = false },
+                            onConfirm = {
+                                onDateSelected(it)
+                                showPicker = false
+                            }
+                        )
+                    } else {
+                        GregorianDatePicker(
+                            onDismiss = { showPicker = false },
+                            onConfirm = {
+                                onDateSelected(it)
+                                showPicker = false
+                            }
+                        )
                     }
-                )
-            } else {
-                GregorianDatePicker(
-                    onDismiss = { showPicker = false },
-                    onConfirm = {
-                        onDateSelected(it)
-                        showPicker = false
-                    }
-                )
+                }
             }
         }
     }
 }
-
 
 @Composable
 fun GregorianDatePicker(
@@ -117,7 +129,7 @@ fun GregorianDatePicker(
         return !cal.before(today)
     }
 
-    PickerCard(
+    PickerBottomSheetContent(
         title = stringResource(R.string.selecting_date),
         onDismiss = onDismiss,
         onConfirm = {
@@ -126,41 +138,42 @@ fun GregorianDatePicker(
                     "$year-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}"
                 )
             }
-        }
+        },
+        isValid = isValidDate(year, month, day)
     ) {
-        Row {
-                NumberPickerComposable(
-                    value = year,
-                    range = today.get(Calendar.YEAR)..2100,
-                    onValueChange = { year = it }
-                )
-                Spacer(Modifier.width(8.dp))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            NumberPickerComposable(
+                value = year,
+                range = today.get(Calendar.YEAR)..2100,
+                onValueChange = { year = it }
+            )
+            Spacer(Modifier.width(16.dp))
 
-                NumberPickerComposable(
-                    value = month,
-                    range = if (year == today.get(Calendar.YEAR)) (today.get(Calendar.MONTH) + 1)..12 else 1..12,
-                    onValueChange = {
-                        month = it
-                        val maxDay = daysInMonth(year, month)
-                        if (day > maxDay) day = maxDay
-                    }
-                )
-                Spacer(Modifier.width(8.dp))
+            NumberPickerComposable(
+                value = month,
+                range = if (year == today.get(Calendar.YEAR)) (today.get(Calendar.MONTH) + 1)..12 else 1..12,
+                onValueChange = {
+                    month = it
+                    val maxDay = daysInMonth(year, month)
+                    if (day > maxDay) day = maxDay
+                }
+            )
+            Spacer(Modifier.width(16.dp))
 
-                NumberPickerComposable(
-                    value = day,
-                    range = if (year == today.get(Calendar.YEAR) && month == today.get(Calendar.MONTH) + 1)
-                        today.get(Calendar.DAY_OF_MONTH)..daysInMonth(year, month)
-                    else 1..daysInMonth(year, month),
-                    onValueChange = { day = it }
-                )
-            }
+            NumberPickerComposable(
+                value = day,
+                range = if (year == today.get(Calendar.YEAR) && month == today.get(Calendar.MONTH) + 1)
+                    today.get(Calendar.DAY_OF_MONTH)..daysInMonth(year, month)
+                else 1..daysInMonth(year, month),
+                onValueChange = { day = it }
+            )
         }
     }
-
-
-
-
+}
 
 @Composable
 fun JalaliDatePicker(
@@ -177,47 +190,45 @@ fun JalaliDatePicker(
     fun isValidDate(date: JalaliDate): Boolean {
         return date >= today
     }
-    PickerCard(
-    title = stringResource(R.string.selecting_date),
-    onDismiss = onDismiss,
-    onConfirm = {
-        val selected = "$year-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}"
-        if (isValidDate(JalaliDate(year, month, day))) {
-            onConfirm(selected)
-        }
-    },
-        isValidDate(JalaliDate(year, month, day))
-    ) {
-            Row {
 
-                NumberPickerComposable(
-                    value = day,
-                    range = if (year == today.year && month == today.month)
-                        today.day..daysInMonth
-                    else 1..daysInMonth,
-                    onValueChange = { day = it }
-                )
-                Spacer(Modifier.width(8.dp))
-                NumberPickerComposable(
-                    value = month,
-                    range = if (year == today.year) today.month..12 else 1..12,
-                    onValueChange = { month = it }
-                )
-                Spacer(Modifier.width(8.dp))
-                NumberPickerComposable(
-                    value = year,
-                    range = today.year..1500,
-                    onValueChange = { year = it }
-                )
+    PickerBottomSheetContent(
+        title = stringResource(R.string.selecting_date),
+        onDismiss = onDismiss,
+        onConfirm = {
+            val selected = "$year-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}"
+            if (isValidDate(JalaliDate(year, month, day))) {
+                onConfirm(selected)
             }
+        },
+        isValid = isValidDate(JalaliDate(year, month, day))
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            NumberPickerComposable(
+                value = day,
+                range = if (year == today.year && month == today.month)
+                    today.day..daysInMonth
+                else 1..daysInMonth,
+                onValueChange = { day = it }
+            )
+            Spacer(Modifier.width(16.dp))
+            NumberPickerComposable(
+                value = month,
+                range = if (year == today.year) today.month..12 else 1..12,
+                onValueChange = { month = it }
+            )
+            Spacer(Modifier.width(16.dp))
+            NumberPickerComposable(
+                value = year,
+                range = today.year..1500,
+                onValueChange = { year = it }
+            )
         }
-
-
     }
-
-
-
-
+}
 
 @Composable
 fun NumberPickerComposable(
@@ -225,7 +236,7 @@ fun NumberPickerComposable(
     range: IntRange,
     onValueChange: (Int) -> Unit
 ) {
-    var currentValue by remember { mutableIntStateOf(value) }
+    var currentValue by remember(value) { mutableIntStateOf(value) }
 
     val textColor by animateColorAsState(
         targetValue = MaterialTheme.colorScheme.primary,
@@ -233,7 +244,7 @@ fun NumberPickerComposable(
     )
 
     val animatedSize by animateDpAsState(
-        targetValue = if (currentValue == value) 24.dp else 20.dp,
+        targetValue = if (currentValue == value) 22.dp else 18.dp,
         label = ""
     )
 
@@ -247,24 +258,24 @@ fun NumberPickerComposable(
             },
             modifier = Modifier
                 .background(
-                    MaterialTheme.colorScheme.surfaceVariant,
+                    MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
                     shape = CircleShape
                 )
         ) {
             Icon(
                 Icons.Default.KeyboardArrowUp,
                 contentDescription = "Increase",
-                tint = MaterialTheme.colorScheme.onSurface
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
 
         Text(
-            text =  currentValue.toString().toDigits(),
+            text = currentValue.toString().toDigits(),
             style = MaterialTheme.typography.titleMedium.copy(
                 fontSize = with(LocalDensity.current) { animatedSize.toSp() }
             ),
             color = textColor,
-            modifier = Modifier.padding(8.dp)
+            modifier = Modifier.padding(vertical = 8.dp)
         )
 
         IconButton(
@@ -276,83 +287,74 @@ fun NumberPickerComposable(
             },
             modifier = Modifier
                 .background(
-                    MaterialTheme.colorScheme.surfaceVariant,
+                    MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
                     shape = CircleShape
                 )
         ) {
             Icon(
                 Icons.Default.KeyboardArrowDown,
                 contentDescription = "Decrease",
-                tint = MaterialTheme.colorScheme.onSurface
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
 }
+
 @Composable
-fun PickerCard(
+fun PickerBottomSheetContent(
     title: String,
     onDismiss: () -> Unit,
     onConfirm: () -> Unit,
     isValid: Boolean = true,
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    Card(
-        shape = RoundedCornerShape(20.dp),
-        elevation = CardDefaults.cardElevation(12.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+    Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
-            .animateContentSize()
+            .padding(top = 8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Column(
-            modifier = Modifier.padding(20.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+        Text(
+            text = title,
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.primary
+        )
+
+        Spacer(Modifier.height(24.dp))
+
+        content()
+
+        Spacer(Modifier.height(28.dp))
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.End)
         ) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.titleLarge,
-                color = MaterialTheme.colorScheme.primary
-            )
-
-            Spacer(Modifier.height(16.dp))
-
-            content()
-
-            Spacer(Modifier.height(20.dp))
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 16.dp),
-                horizontalArrangement = Arrangement.Center
+            TextButton(
+                onClick = onDismiss,
+                modifier = Modifier.weight(1f).height(50.dp)
             ) {
-                TextButton(onClick = onDismiss) {
-                    Text(text = stringResource(R.string.cancel), color = MaterialTheme.colorScheme.onSurfaceVariant)
-                }
-                Spacer(Modifier.width(8.dp))
-                Button(
-                    onClick = onConfirm,
-                    shape = RoundedCornerShape(12.dp),
-                    enabled = isValid,
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.primary,
-                        contentColor = MaterialTheme.colorScheme.onPrimary
-                    )
-                ) {
-                    Text(text = stringResource(R.string.confirm))
-                }
-                }
+                Text(
+                    text = stringResource(R.string.cancel),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+            Button(
+                onClick = onConfirm,
+                shape = RoundedCornerShape(14.dp),
+                enabled = isValid,
+                modifier = Modifier.weight(1f).height(50.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+                )
+            ) {
+                Text(
+                    text = stringResource(R.string.confirm),
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.Bold
+                )
             }
         }
     }
-
-
-
-
-
-
-
-
-
-
+}

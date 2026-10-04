@@ -106,4 +106,16 @@
     <string name="At_time_of_activity">It is time for the activity</string>
     <string name="calendar">Calendar</string>
     <string name="error_get_data">Error getting data</string>
+    <string name="category">Category</string>
+    <string name="hour">Hour</string>
+    <string name="minutes">Minutes</string>
+
+    <string name="category_general">General</string>
+    <string name="category_personal">Personal</string>
+    <string name="category_work">Work</string>
+    <string name="category_gym_health">Gym &amp; Health</string>
+    <string name="category_study">Study</string>
+    <string name="category_shopping">Shopping</string>
+    <string name="category_meeting">Meeting</string>
+
 </resources>
